@@ -1,18 +1,24 @@
+---
+layout: default
+title: Tech Fundamentals
+workshop: Tech Fundamentals
+---
+
 # Tech Fundamentals - 2 hour Workshop
 
-**Audience:** Beginners with little to no programming experience
+**Audience:** Beginners with little to no programming experience \\
 **Theme:** _"How computers actually work, and how you control them"_
 
-* [Slides](./slides.html)
+* [Slides]({{ site.baseurl }}/tech-fundamentals/slides.html)
 * Resources:
-  * [Glossary](./resources/glossary.html)
-  * [Next Steps After Tech Fundamentals](./resources/next-steps.html)
+  * [Glossary]({{ site.baseurl }}/tech-fundamentals/resources/glossary)
+  * [Next Steps After Tech Fundamentals]({{ site.baseurl }}/tech-fundamentals/resources/next-steps)
 * Student Handouts:
-  * [Vocabulary Handout](./student-handouts/vocabulary.html)
-  * [Worksheet Handout](./student-handouts/worksheet.html)
+  * [Vocabulary Handout]({{ site.baseurl }}/tech-fundamentals/student-handouts/vocabulary)
+  * [Worksheet Handout]({{ site.baseurl }}/tech-fundamentals/student-handouts/worksheet)
 * Instructor Notes:
-  * [Common Questions](./instructor-notes/common-questions.html)
-  * [Timing Guide](./instructor-notes/timing-guide.html)
+  * [Common Questions]({{ site.baseurl }}/tech-fundamentals/instructor-notes/common-questions)
+  * [Timing Guide]({{ site.baseurl }}/tech-fundamentals/instructor-notes/timing-guide)
 
 ## 1. Workshop Goals
 

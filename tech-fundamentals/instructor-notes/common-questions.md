@@ -1,3 +1,10 @@
+---
+layout: default
+title: Common Questions
+workshop: Tech Fundamentals
+section: Instructor Notes
+---
+
 # Common Questions & Friendly Answers
 
 Use simple language first; add detail only if a student asks for more. Keep the

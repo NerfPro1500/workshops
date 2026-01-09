@@ -1,4 +1,10 @@
-<link rel="stylesheet" href="../../assets/style/print.css">
+---
+layout: default
+title: Worksheet
+workshop: Tech Fundamentals
+section: Student Handouts
+print_friendly: true
+---
 
 # Tech Fundamentals Mission Worksheet
 

@@ -1,7 +1,15 @@
+---
+layout: default
+title: Timing Guide
+workshop: Tech Fundamentals
+section: Instructor Notes
+---
+
 # Tech Fundamentals Timing Guide (2 Hours)
 
-Audience: 12–14 year-olds, beginners. **Goal**: build confidence with computers,
-files, and the terminal. Keep energy light and celebrate curiosity.
+**Audience**: 12–14 year-olds, beginners. \\
+**Goal**: build confidence with computers, files, and the terminal.
+Keep energy light and celebrate curiosity.
 
 ## 0:00–0:10 - Welcome & Comfort Icebreaker
 

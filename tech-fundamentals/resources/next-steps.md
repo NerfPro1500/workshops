@@ -1,3 +1,10 @@
+---
+layout: default
+title: Next Steps
+workshop: Tech Fundamentals
+section: Resources
+---
+
 # Next Steps After Tech Fundamentals
 
 Keep the momentum going with a few quick wins. Pick one or two to do this week.

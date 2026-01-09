@@ -1,0 +1,60 @@
+# Jekyll configuration for GitHub Pages
+# Site hosted at: https://lansingtechstudio.org/workshops
+
+title: Lansing Tech Studio Workshops
+description: Youth tech workshops for students ages 12-14
+baseurl: "/workshops"
+url: "https://lansingtechstudio.org"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Theme settings - using minimal defaults to allow custom styling
+plugins:
+  - jekyll-relative-links
+
+# Convert .md links to .html automatically
+relative_links:
+  enabled: true
+  collections: true
+
+# Navigation structure - used by _includes/nav.html
+navigation:
+  - title: Home
+    url: /
+  - title: Tech Fundamentals
+    url: /tech-fundamentals/
+    subnav:
+      - title: Slides
+        url: /tech-fundamentals/slides.html
+      - title: Resources
+        items:
+          - title: Glossary
+            url: /tech-fundamentals/resources/glossary
+          - title: Next Steps
+            url: /tech-fundamentals/resources/next-steps
+      - title: Student Handouts
+        items:
+          - title: Vocabulary
+            url: /tech-fundamentals/student-handouts/vocabulary
+          - title: Worksheet
+            url: /tech-fundamentals/student-handouts/worksheet
+      - title: Instructor Notes
+        items:
+          - title: Common Questions
+            url: /tech-fundamentals/instructor-notes/common-questions
+          - title: Timing Guide
+            url: /tech-fundamentals/instructor-notes/timing-guide
+
+# Defaults for all pages
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: "tech-fundamentals"
+    values:
+      workshop: "Tech Fundamentals"

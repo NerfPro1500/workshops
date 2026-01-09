@@ -1,3 +1,10 @@
+---
+layout: default
+title: Glossary
+workshop: Tech Fundamentals
+section: Resources
+---
+
 # Tech Fundamentals Glossary
 
 Quick definitions for the core terms used in the workshop. Keep these handy as
