@@ -16,9 +16,9 @@ This guide will help you install all the software needed for the Lansing Tech St
 - **Python 3** - For Python workshops (can be deferred)
 - **Git** - Version control for saving and sharing code
 
-**Time estimate:** 30-45 minutes
-**Required before:** JavaScript Basics workshop (1/22/2026)
-**Best timing:** 1-2 days before the workshop
+**Time estimate:** 30-45 minutes \
+**Required before:** JavaScript Basics workshop (1/22/2026) \
+**Best timing:** if you try at least a few days before the workshop you can get help beforehand if needed
 
 ## Prerequisites
 
@@ -125,7 +125,7 @@ After installing VS Code on Windows, you need the WSL extension:
 
 ```bash
 # In Ubuntu terminal
-code . # Opens current folder (.) in VS Code
+code . # Opens current folder (the "dot" means current directory) in VS Code
 ```
 
 **Helpful Guide:** [VS Code with WSL](https://code.visualstudio.com/docs/remote/wsl)
@@ -307,7 +307,31 @@ Then:
 ssh -T git@github.com
 ```
 
-## Section 7: Final Verification
+## Section 7: Cloning the Workshop Repository
+
+**Forking the Repo:**
+
+1. Go to the workshop repository URL: <https://github.com/Lansing-Tech-Studio/workshops>
+2. Click "Fork" (upper right) to create your own copy
+3. Choose your GitHub account
+
+**Cloning the Repo:**
+
+```bash
+# Replace USERNAME with your GitHub username
+git clone https://github.com/USERNAME/workshops.git
+cd workshops
+```
+
+If you have trouble with HTTPS, use SSH:
+
+```bash
+# Replace USERNAME with your GitHub username
+git clone git@github.com:USERNAME/workshops.git
+cd workshops
+```
+
+## Section 8: Final Verification
 
 Test everything together to make sure it all works!
 
@@ -409,6 +433,7 @@ Complete this checklist 1-2 days before the workshop:
 - [ ] `git --version` shows version number
 - [ ] GitHub account created and verified
 - [ ] Git configured with your name and email
+- [ ] Workshop repo forked and cloned
 - [ ] Can create and run a test JavaScript file
 
 **All checked?** You're ready for the workshop!
