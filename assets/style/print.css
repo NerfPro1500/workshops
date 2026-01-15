@@ -1,18 +1,23 @@
 /* Print-friendly styling for readability via VS Code Print extension */
-body {
+/* Only apply to main content area, not navigation */
+.main-content,
+.main-content .content {
   font-family: "OpenDyslexic", "Atkinson Hyperlegible", "Segoe UI", Arial, sans-serif;
   font-size: 16pt;
   line-height: 1.6;
 }
-h1, h2 {
+
+.main-content h1,
+.main-content h2 {
   font-family: inherit;
   line-height: 1.3;
   margin-top: 0.6em;
 }
-ul, ol {
+.main-content ul,
+.main-content ol {
   padding-left: 1.1em;
 }
-li {
+.main-content li {
   margin: 0.25em 0;
 }
 code {
