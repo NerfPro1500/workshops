@@ -175,10 +175,15 @@ Attach a script to `Gem` (Area2D):
 2. Attach script: `gem.gd`
 3. Save it at: `scripts/gem.gd`
 
-```gdscript
+```python
 extends Area2D
 
+# Define a signal to emit when the gem is collected
+signal collected(points: int)
+
 func collect_gem() -> void:
+	# TODO: emit the "collected" signal with points (for example, 10)
+	#collected.emit(10)
 	queue_free()
 
 func _on_body_entered(body: Node2D) -> void:
