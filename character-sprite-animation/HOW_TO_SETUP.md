@@ -8,7 +8,7 @@ playable game in minutes.
 
 ## 🕹️ Step 1 — Load the Project
 
-1. Open your browser and go to **<https://editor.godotengine.org>**
+1. Open your browser and go to **[https://editor.godotengine.org](https://editor.godotengine.org){:target="_blank"}**
 2. Download **[character-sprite-animation.zip](./character-sprite-animation.zip)**
 3. Drag the ZIP file onto the Project Manager window
 4. Click **Install** and wait for it to finish loading
@@ -22,7 +22,7 @@ playable game in minutes.
 
 The game needs 13 image files — one for each move your character can do.
 
-1. Go to **<https://deymoon.itch.io/character-template>** and click **Download**
+1. Go to **[https://deymoon.itch.io/character-template](https://deymoon.itch.io/character-template){:target="_blank"}** and click **Download**
 2. Open the ZIP file that downloads to your computer
 3. Find the folder containing the PNG files (they all start with `character_`)
 4. Keep this folder open — you'll need it in the next step
@@ -33,7 +33,7 @@ The game needs 13 image files — one for each move your character can do.
 
 ## 🖌️ Step 3 — Customize a Sprite in Piskel
 
-1. Open **<https://www.piskelapp.com/>** in your browser
+1. Open **[https://www.piskelapp.com/](https://www.piskelapp.com/){:target="_blank"}** in your browser
 2. Drag and drop one PNG from your Deymoon folder into the Piskel editor (for example `character_idle.png`)
 3. In **Import and Merge**, choose **Import as spritesheet**
 4. Set **Frame size** to **48 × 48** (width **48px**), then click **import**
