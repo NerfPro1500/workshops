@@ -88,7 +88,7 @@ def save_game(player, current_room):
         "room": current_room,
     }
     with open("savegame.json", "w") as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=2)
     print("Game saved!")
 
 
