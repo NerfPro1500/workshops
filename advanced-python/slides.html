@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Advanced Python Coding</title>
+
+	<link rel="stylesheet" href="../assets/revealjs/reset.css">
+	<link rel="stylesheet" href="../assets/revealjs/reveal.css">
+	<link rel="stylesheet" href="../assets/revealjs/theme/black.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="../assets/revealjs/plugin/highlight/monokai.css">
+	<style>
+		.outlined {
+			text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black !important;
+		}
+
+		div.slide-background-content {
+			background-size: 900px 900px;
+			background-repeat: no-repeat;
+			background-position: center center;
+			opacity: 0.05;
+			background-image: url("../assets/images/logo-transparent.png");
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-image="../assets/images/logo-transparent.png" data-background-size="900px 900px"
+				data-background-opacity="0.7" data-background-repeat="no-repeat"
+				data-background-position="center center">
+				<h2 class="outlined">Advanced Python Coding</h2>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p class="outlined">by Brendon Thiede</p>
+			</section>
+
+			<section>
+				<h2>Student Goals</h2>
+				<ul>
+					<li>Use lists and dictionaries to organize data</li>
+					<li>Write functions to keep code reusable</li>
+					<li>Build a Player class with attributes and methods</li>
+					<li>Save and load game progress with a file</li>
+					<li>Complete a working multi-room text RPG</li>
+				</ul>
+			</section>
+
+			<!-- 0:00-0:10 Welcome & Icebreaker -->
+			<section>
+				<h2>Icebreaker</h2>
+				<p>If you were designing a video game...</p>
+				<p><em>What is the first room the player starts in?</em></p>
+				<p>Describe it in one sentence.</p>
+			</section>
+
+			<!-- 0:10-0:25 Setup -->
+			<section>
+				<section>
+					<h2>Let's Get Set Up</h2>
+					<p>Time to get our starter code!</p>
+				</section>
+				<section>
+					<h3>Step 1: Fork or Sync</h3>
+					<ol>
+						<li>Go to the workshop repository on GitHub</li>
+						<li>If new: click <strong>Fork</strong></li>
+						<li>If returning: click <strong>Sync fork → Update branch</strong></li>
+					</ol>
+					<p><img src="../assets/images/workshops-qr.png" alt="https://github.com/Lansing-Tech-Studio/workshops" height="185"></p>
+					<div style="position: absolute; bottom: -100px; right: -530px; width: 2000px;">
+						https://github.com/Lansing-Tech-Studio/workshops
+					</div>
+				</section>
+				<section>
+					<h3>Step 2: Clone &amp; Navigate</h3>
+					<pre><code data-trim>
+git clone https://github.com/YOUR-USERNAME/workshops.git
+cd workshops/advanced-python/starter-code
+					</code></pre>
+					<p><em>Already cloned? Run <code>git pull</code> instead</em></p>
+				</section>
+				<section>
+					<h3>Step 3: Open in VS Code</h3>
+					<pre><code data-trim>
+code .
+					</code></pre>
+					<p>Open the integrated terminal: <strong>View → Terminal</strong></p>
+				</section>
+				<section>
+					<h3>Step 4: Run the Starter Game</h3>
+					<pre><code data-trim>
+cd advanced-python/starter-code
+python game.py
+					</code></pre>
+					<p>You should see the game title and a name prompt!</p>
+					<p><em>Type a name, then type <code>quit</code> to exit</em></p>
+				</section>
+			</section>
+
+			<!-- 0:25-0:45 Lists & Dictionaries -->
+			<section>
+				<section>
+					<h2>Lists</h2>
+					<p>Ordered collections — perfect for inventories</p>
+				</section>
+				<section>
+					<h3>Creating a List</h3>
+					<pre><code data-trim class="language-python">
+inventory = []                 # empty list
+inventory.append("sword")      # add an item
+inventory.append("torch")      # add another
+print(inventory)               # ['sword', 'torch']
+print(inventory[0])            # 'sword'  (starts at 0!)
+print(len(inventory))          # 2
+					</code></pre>
+					<p><em>Square brackets <code>[ ]</code> — items separated by commas</em></p>
+				</section>
+				<section>
+					<h3>Looping Over a List</h3>
+					<pre><code data-trim class="language-python">
+inventory = ["sword", "torch", "map"]
+
+for item in inventory:
+    print(f"  - {item}")
+					</code></pre>
+					<p>Output:</p>
+					<pre><code data-trim>
+  - sword
+  - torch
+  - map
+					</code></pre>
+				</section>
+				<section>
+					<h2>Dictionaries</h2>
+					<p>Labeled data — perfect for room descriptions</p>
+				</section>
+				<section>
+					<h3>Creating a Dictionary</h3>
+					<pre><code data-trim class="language-python">
+room = {
+    "name": "Dark Cave",
+    "description": "Cold and damp.",
+    "exits": ["entrance", "tunnel"],
+    "item": "torch"
+}
+
+print(room["name"])      # Dark Cave
+print(room["exits"])     # ['entrance', 'tunnel']
+print(room["exits"][0])  # entrance
+					</code></pre>
+					<p><em>Curly braces <code>{ }</code> — key: value pairs</em></p>
+				</section>
+				<section>
+					<h3>A Dictionary of Dictionaries</h3>
+					<p>This is how <code>game.py</code> stores all the rooms!</p>
+					<pre><code data-trim class="language-python">
+rooms = {
+    "cave": {
+        "name": "Dark Cave",
+        "exits": ["entrance"],
+        "item": "torch"
+    },
+    "entrance": {
+        "name": "Cave Entrance",
+        "exits": ["cave", "forest"],
+        "item": None
+    },
+}
+
+print(rooms["cave"]["item"])   # torch
+					</code></pre>
+				</section>
+				<section>
+					<h3>Open game.py</h3>
+					<p>Find the <code>rooms</code> dictionary at the top.</p>
+					<p>What does <code>rooms["forest"]["item"]</code> return?</p>
+				</section>
+			</section>
+
+			<!-- 0:45-1:00 Functions -->
+			<section>
+				<section>
+					<h2>Functions</h2>
+					<p>Reusable pieces of code — the secret to bigger programs</p>
+				</section>
+				<section>
+					<h3>Why Functions?</h3>
+					<p>Without functions:</p>
+					<pre><code data-trim class="language-python">
+# Room 1
+print("=== Dark Cave ===")
+print(rooms["cave"]["description"])
+print(f"Exits: {', '.join(rooms['cave']['exits'])}")
+
+# Room 2
+print("=== Forest ===")
+print(rooms["forest"]["description"])
+print(f"Exits: {', '.join(rooms['forest']['exits'])}")
+
+# ... repeat for every room
+					</code></pre>
+					<p><em>Copy-paste is a warning sign — time for a function!</em></p>
+				</section>
+				<section>
+					<h3>With a Function</h3>
+					<pre><code data-trim class="language-python">
+def describe_room(room):
+    print(f"\n=== {room['name']} ===")
+    print(room['description'])
+    print(f"Exits: {', '.join(room['exits'])}")
+    if room['item']:
+        print(f"You see: {room['item']}")
+
+# Now call it for any room:
+describe_room(rooms["cave"])
+describe_room(rooms["forest"])
+					</code></pre>
+					<p><em>Change the function once → fixes everything</em></p>
+				</section>
+				<section>
+					<h3>Function Anatomy</h3>
+					<pre><code data-trim class="language-python">
+def greet(name):         # def, function name, parameter
+    message = f"Hello, {name}!"
+    return message       # send a value back
+
+result = greet("Alex")   # call the function
+print(result)            # Hello, Alex!
+					</code></pre>
+				</section>
+				<section>
+					<h3>Your First TODO: take_item()</h3>
+					<p>Find <code>take_item()</code> in <code>game.py</code>. It currently does nothing (<code>pass</code>).</p>
+					<p>Make it:</p>
+					<ol>
+						<li>Check if <code>room['item']</code> is not <code>None</code></li>
+						<li>If yes: add the item to <code>player.inventory</code>, clear <code>room['item']</code>, print a message</li>
+						<li>If no: print "There is nothing to take here."</li>
+					</ol>
+				</section>
+			</section>
+
+			<!-- 1:00-1:10 Break -->
+			<section>
+				<section>
+					<h2>Energizer Break</h2>
+				</section>
+				<section>
+					<h3>Coding Riddle</h3>
+					<p>Why do programmers prefer dark mode?</p>
+					<p class="fragment"><em>Bugs are attracted to light!</em></p>
+				</section>
+			</section>
+
+			<!-- 1:10-1:20 Classes & Modules -->
+			<section>
+				<section>
+					<h2>Classes</h2>
+					<p>Blueprints for creating objects</p>
+				</section>
+				<section>
+					<h3>What is a Class?</h3>
+					<p>A class describes <em>what data an object has</em> and <em>what it can do</em>.</p>
+					<pre><code data-trim class="language-python">
+class Player:
+    def __init__(self, name):     # runs when created
+        self.name = name          # attribute
+        self.health = 100         # attribute
+        self.inventory = []       # attribute
+
+player = Player("Alex")           # create one Player
+print(player.name)                # Alex
+print(player.health)              # 100
+					</code></pre>
+				</section>
+				<section>
+					<h3>Methods: Functions on an Object</h3>
+					<pre><code data-trim class="language-python">
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.health = 100
+
+    def is_alive(self):
+        return self.health > 0
+
+player = Player("Alex")
+print(player.is_alive())    # True
+player.health = 0
+print(player.is_alive())    # False
+					</code></pre>
+					<p><em><code>self</code> refers to this specific Player object</em></p>
+				</section>
+				<section>
+					<h3>Modules: Splitting Code into Files</h3>
+					<p><code>player.py</code> holds the Player class.</p>
+					<p><code>game.py</code> imports it:</p>
+					<pre><code data-trim class="language-python">
+from player import Player
+
+player = Player("Alex")
+					</code></pre>
+					<p><em>One file, one responsibility — easier to read and fix</em></p>
+				</section>
+				<section>
+					<h3>Your Second TODO: player.py</h3>
+					<p>Open <code>player.py</code> and add two methods:</p>
+					<ol>
+						<li><code>take_damage(self, amount)</code> — reduce health, print status</li>
+						<li><code>has_item(self, item_name)</code> — return True/False</li>
+					</ol>
+					<p>Hint: <code>return item_name in self.inventory</code></p>
+				</section>
+			</section>
+
+			<!-- 1:20-1:25 File I/O -->
+			<section>
+				<section>
+					<h2>File I/O</h2>
+					<p>Making your game remember between sessions</p>
+				</section>
+				<section>
+					<h3>Save &amp; Load</h3>
+					<p>The <code>save_game()</code> and <code>load_game()</code> functions are already in <code>game.py</code>.</p>
+					<pre><code data-trim class="language-python">
+import json
+
+# Writing to a file
+data = {"name": "Alex", "inventory": ["torch"]}
+with open("savegame.json", "w") as f:
+    json.dump(data, f)
+
+# Reading from a file
+with open("savegame.json", "r") as f:
+    data = json.load(f)
+print(data["inventory"])    # ['torch']
+					</code></pre>
+				</section>
+				<section>
+					<h3>Try It Now</h3>
+					<ol>
+						<li>Run the game: <code>python game.py</code></li>
+						<li>Pick up an item (go to a room, type <code>take</code>)</li>
+						<li>Type <code>save</code>, then <code>quit</code></li>
+						<li>Run the game again and load your save</li>
+						<li>Your inventory is still there!</li>
+					</ol>
+					<p><em>Open <code>savegame.json</code> in VS Code to see what Python wrote</em></p>
+				</section>
+			</section>
+
+			<!-- 1:25-1:45 Hands-On Time -->
+			<section>
+				<section>
+					<h2>Hands-On: Build Your RPG!</h2>
+				</section>
+				<section>
+					<h3>Minimum Mission</h3>
+					<ol>
+						<li>Complete <code>take_item()</code> in <code>game.py</code></li>
+						<li>Complete <code>take_damage()</code> and <code>has_item()</code> in <code>player.py</code></li>
+						<li>Run the game end-to-end</li>
+						<li>Pick up an item, save, quit, reload</li>
+					</ol>
+				</section>
+				<section>
+					<h3>Extend Your Game</h3>
+					<ul>
+						<li>Add a new room to the <code>rooms</code> dict and connect it</li>
+						<li>Add a <code>"help"</code> command to the dispatcher</li>
+						<li>Add an enemy: entering a room calls <code>player.take_damage()</code></li>
+						<li>Add a win condition when all items are collected</li>
+						<li>Add a <code>max_inventory</code> limit to the Player class</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Getting Help</h3>
+					<ul>
+						<li><code>KeyError</code> — check for typos in room names</li>
+						<li><code>AttributeError</code> — make sure your method has <code>self</code></li>
+						<li><code>IndentationError</code> — check method is inside the class</li>
+						<li>Delete <code>savegame.json</code> if the save file is corrupted</li>
+						<li>Ask an instructor — we're here to help!</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- 1:45-1:55 Git & Show-and-Tell -->
+			<section>
+				<section>
+					<h2>Save Your Work</h2>
+					<p>Let's commit to Git!</p>
+				</section>
+				<section>
+					<h3>Git Commands</h3>
+					<pre><code data-trim>
+git add .
+git commit -m "Complete text RPG"
+git push
+					</code></pre>
+					<p>Now your RPG is saved on GitHub!</p>
+				</section>
+				<section>
+					<h2>Show &amp; Tell</h2>
+					<p>Who wants to demo their game?</p>
+					<p><em>Enter a room, pick up an item, save, and reload!</em></p>
+				</section>
+			</section>
+
+			<!-- 1:55-2:00 Wrap-Up -->
+			<section>
+				<section>
+					<h2>Wrap-Up</h2>
+				</section>
+				<section>
+					<h3>What We Learned</h3>
+					<ul>
+						<li>Lists store ordered collections — great for inventories</li>
+						<li>Dictionaries store labeled data — great for rooms</li>
+						<li>Functions keep code reusable and readable</li>
+						<li>Classes are blueprints for creating objects</li>
+						<li>Files let programs remember data between runs</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Reflection</h3>
+					<p>Which concept clicked the most for you today?</p>
+					<p>What would you add to your RPG with more time?</p>
+				</section>
+				<section>
+					<h3>These Skills Unlock...</h3>
+					<ul>
+						<li><strong>Web apps</strong> — Flask uses dicts + functions for every page</li>
+						<li><strong>Data analysis</strong> — Pandas works with lists of dicts</li>
+						<li><strong>AI projects</strong> — every AI library uses classes</li>
+						<li><strong>Async programming</strong> — the next step after event loops</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Keep Building</h3>
+					<ul>
+						<li>Expand your RPG: more rooms, enemies, puzzles</li>
+						<li>Try the Next Steps guide for async, Flask, and more</li>
+						<li>Read other people's Python projects on GitHub</li>
+						<li>Every program you read teaches you something new</li>
+					</ul>
+				</section>
+			</section>
+
+			<section>Questions?</section>
+			<section data-background-image="../assets/images/logo-transparent.png" data-background-size="900px 900px"
+				data-background-opacity="1" data-background-repeat="no-repeat" data-background-position="center center">
+				<h2 class="outlined"><em>Thank you!</em></h2>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+			</section>
+		</div>
+	</div>
+
+	<script src="../assets/revealjs/reveal.js"></script>
+	<script src="../assets/revealjs/plugin/notes/notes.js"></script>
+	<script src="../assets/revealjs/plugin/markdown/markdown.js"></script>
+	<script src="../assets/revealjs/plugin/highlight/highlight.js"></script>
+	<script>
+		Reveal.initialize({
+			hash: true,
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
+
+</html>

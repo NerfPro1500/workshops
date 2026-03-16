@@ -146,6 +146,29 @@ navigation:
     subnav:
       - title: Setup Guide
         url: /character-sprite-animation/HOW_TO_SETUP
+  - title: Advanced Python Coding
+    url: /advanced-python/
+    subnav:
+      - title: Slides
+        url: /advanced-python/slides.html
+      - title: Resources
+        items:
+          - title: Glossary
+            url: /advanced-python/resources/glossary
+          - title: Next Steps
+            url: /advanced-python/resources/next-steps
+      - title: Student Handouts
+        items:
+          - title: Vocabulary
+            url: /advanced-python/student-handouts/vocabulary
+          - title: Worksheet
+            url: /advanced-python/student-handouts/worksheet
+      - title: Instructor Notes
+        items:
+          - title: Common Questions
+            url: /advanced-python/instructor-notes/common-questions
+          - title: Timing Guide
+            url: /advanced-python/instructor-notes/timing-guide
   - title: Learning Checks
     url: /learning-checks
 
@@ -164,3 +187,7 @@ defaults:
       path: "tech-fundamentals"
     values:
       workshop: "Tech Fundamentals"
+  - scope:
+      path: "advanced-python"
+    values:
+      workshop: "Advanced Python Coding"
