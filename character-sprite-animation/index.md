@@ -2,6 +2,7 @@
 layout: default
 title: Digital Art & Animation
 workshop: Digital Art & Animation
+comments: true
 ---
 
 # Digital Art & Animation - 2 Hour Workshop

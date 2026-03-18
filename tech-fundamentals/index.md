@@ -2,6 +2,7 @@
 layout: default
 title: Tech Fundamentals
 workshop: Tech Fundamentals
+comments: true
 ---
 
 # Tech Fundamentals - 2 hour Workshop

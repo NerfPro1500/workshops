@@ -2,6 +2,7 @@
 layout: default
 title: Advanced Python Coding
 workshop: Advanced Python Coding
+comments: true
 ---
 
 # Advanced Python Coding - 2 Hour Workshop

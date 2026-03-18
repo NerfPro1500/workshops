@@ -2,6 +2,7 @@
 layout: default
 title: AI Playground for Kids
 workshop: AI Playground for Kids
+comments: true
 ---
 
 # AI Playground for Kids - 2 Hour Workshop

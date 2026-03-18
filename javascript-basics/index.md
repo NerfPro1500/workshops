@@ -2,6 +2,7 @@
 layout: default
 title: JavaScript Basics
 workshop: JavaScript Basics
+comments: true
 ---
 
 # JavaScript Basics - 2 Hour Workshop

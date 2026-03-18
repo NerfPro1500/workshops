@@ -2,6 +2,7 @@
 layout: default
 title: Sound Design and Foley
 workshop: Sound Design and Foley
+comments: true
 ---
 
 # Sound Design and Foley - 2 Hour Workshop

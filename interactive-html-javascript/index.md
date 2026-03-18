@@ -2,6 +2,7 @@
 layout: default
 title: Interactive HTML + JavaScript
 workshop: Interactive HTML + JavaScript
+comments: true
 ---
 
 # Interactive HTML + JavaScript - 2 Hour Workshop

@@ -2,6 +2,7 @@
 layout: default
 title: Python Coding Introduction
 workshop: Python Coding Introduction
+comments: true
 ---
 
 # Python Coding Introduction - 2 Hour Workshop

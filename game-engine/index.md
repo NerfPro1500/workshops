@@ -2,6 +2,7 @@
 layout: default
 title: Game Engine Tools
 workshop: Game Engine Tools
+comments: true
 ---
 
 # Game Engine Tools - 90 Minute Workshop
