@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mechanics Demo - Lansing Tech Studio</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0d1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      color: #ddd;
+    }
+
+    h1 {
+      font-size: 1.1em;
+      margin-bottom: 8px;
+      color: #aad4ff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    #game-wrapper {
+      position: relative;
+      border: 2px solid #334;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    #flash-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Courier New', monospace;
+      font-size: 28px;
+      font-weight: bold;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      text-shadow: 0 0 16px currentColor;
+      white-space: nowrap;
+    }
+
+    #controls-hint {
+      margin-top: 8px;
+      font-size: 0.78em;
+      color: #778;
+    }
+
+    #design-note {
+      margin-top: 14px;
+      max-width: 720px;
+      background: #111827;
+      border: 1px solid #2a3a5a;
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 0.82em;
+      line-height: 1.6;
+      color: #99aacc;
+    }
+
+    #design-note strong { color: #aad4ff; }
+    #design-note h3 { color: #aad4ff; margin-bottom: 6px; font-size: 0.95em; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+
+<h1>Mechanics Demo</h1>
+
+<div id="game-wrapper">
+  <canvas id="game" width="720" height="400"></canvas>
+  <div id="flash-message"></div>
+</div>
+
+<p id="controls-hint">Arrow Keys / WASD: Move &nbsp;|&nbsp; Space / Up / W: Jump &nbsp;|&nbsp; Z: Shoot</p>
+
+<div id="design-note">
+  <h3>Designer's Lens</h3>
+  <p>
+    This demo shows <strong>progressive discovery</strong>: the player starts with one ability (jump),
+    finds a powerup that grants a second (double jump), then the new ability opens a path to a third (shoot).
+    Notice how each pickup is placed right where you need to use the new ability — the game
+    <strong>teaches through placement</strong>, not through text.
+    The HUD on the left shows what mechanics are locked or unlocked at any moment.
+  </p>
+</div>
+
+<script>
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const flashEl = document.getElementById('flash-message');
+
+  // ─── Constants ───────────────────────────────────────────────
+  const W = canvas.width;
+  const H = canvas.height;
+  const GRAVITY = 0.45;
+  const JUMP_FORCE = -10.5;
+  const SPEED = 3.2;
+
+  // ─── Colors ──────────────────────────────────────────────────
+  const C = {
+    bg: '#0d1117',
+    ground: '#2a3a5a',
+    platformLow: '#2a5a3a',
+    platformMid: '#5a3a2a',
+    platformHigh: '#5a2a5a',
+    platformTarget: '#2a4a5a',
+    player: '#4488ff',
+    playerEye: '#ffffff',
+    boots: '#00ddaa',
+    wand: '#ffaa00',
+    bullet: '#ffff44',
+    target: '#cc3333',
+    targetDead: '#444',
+    hud: 'rgba(0,0,0,0.65)',
+    locked: '#ff5555',
+    unlocked: '#44ff99',
+    neutral: '#99aabb',
+  };
+
+  // ─── Platforms ───────────────────────────────────────────────
+  // { x, y, w, h, color, label? }
+  const platforms = [
+    { x: 0,   y: 370, w: W,   h: 30,  color: C.ground },       // ground
+    { x: 60,  y: 300, w: 110, h: 12,  color: C.platformLow },  // low left
+    { x: 240, y: 240, w: 100, h: 12,  color: C.platformMid },  // mid (boots here)
+    { x: 430, y: 95,  w: 110, h: 12,  color: C.platformHigh }, // high (needs double jump, wand here)
+    { x: 590, y: 280, w: 110, h: 12,  color: C.platformTarget },// target platform
+  ];
+
+  // ─── Signs / hints in the world ──────────────────────────────
+  const signs = [
+    { x: 410, y: 80, text: '? Need to jump higher ?', color: '#886644' },
+  ];
+
+  // ─── Pickups ─────────────────────────────────────────────────
+  const pickups = [
+    {
+      id: 'boots',
+      x: 272, y: 216,
+      w: 22, h: 22,
+      color: C.boots,
+      glowColor: '#00ffcc',
+      label: 'BOOTS',
+      sublabel: 'Double Jump',
+      collected: false,
+      bobOffset: 0,
+    },
+    {
+      id: 'wand',
+      x: 460, y: 84,
+      w: 22, h: 22,
+      color: C.wand,
+      glowColor: '#ffcc44',
+      label: 'WAND',
+      sublabel: 'Shoot [Z]',
+      collected: false,
+      bobOffset: Math.PI, // phase offset so they bob out of sync
+    },
+  ];
+
+  // ─── Target ──────────────────────────────────────────────────
+  const target = {
+    x: 614, y: 248,
+    w: 28, h: 28,
+    hp: 3, maxHp: 3,
+  };
+
+  // ─── Player ──────────────────────────────────────────────────
+  const player = {
+    x: 30, y: 300,
+    w: 22, h: 28,
+    vx: 0, vy: 0,
+    onGround: false,
+    jumpsLeft: 1,
+    maxJumps: 1,
+    hasDoubleJump: false,
+    hasWand: false,
+    facingRight: true,
+    bullets: [],
+  };
+
+  // ─── Input ───────────────────────────────────────────────────
+  const keys = {};
+  let jumpConsumed = false;
+  let shootConsumed = false;
+
+  document.addEventListener('keydown', e => {
+    keys[e.key] = true;
+    // Prevent page scroll on space/arrows
+    if ([' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+      e.preventDefault();
+    }
+  });
+  document.addEventListener('keyup', e => {
+    keys[e.key] = false;
+    if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+      jumpConsumed = false;
+    }
+    if (e.key === 'z' || e.key === 'Z') {
+      shootConsumed = false;
+    }
+  });
+
+  // ─── Flash message ───────────────────────────────────────────
+  let flashTimer = 0;
+
+  function showFlash(text, color) {
+    flashEl.textContent = text;
+    flashEl.style.color = color;
+    flashEl.style.opacity = '1';
+    flashTimer = 120; // frames
+  }
+
+  // ─── Collision helpers ───────────────────────────────────────
+  function rectsOverlap(ax, ay, aw, ah, bx, by, bw, bh) {
+    return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+  }
+
+  // ─── Update ──────────────────────────────────────────────────
+  let tick = 0;
+
+  function update() {
+    tick++;
+
+    // Player movement
+    player.vx = 0;
+    if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
+      player.vx = -SPEED;
+      player.facingRight = false;
+    }
+    if (keys['ArrowRight'] || keys['d'] || keys['D']) {
+      player.vx = SPEED;
+      player.facingRight = true;
+    }
+
+    // Jump
+    const jumpKey = keys[' '] || keys['ArrowUp'] || keys['w'] || keys['W'];
+    if (jumpKey && !jumpConsumed && player.jumpsLeft > 0) {
+      jumpConsumed = true;
+      player.vy = JUMP_FORCE;
+      player.jumpsLeft--;
+    }
+
+    // Gravity
+    player.vy += GRAVITY;
+    if (player.vy > 14) player.vy = 14; // terminal velocity
+
+    // Move X
+    player.x += player.vx;
+    player.x = Math.max(0, Math.min(W - player.w, player.x));
+
+    // Move Y
+    player.y += player.vy;
+
+    // Platform collisions (land-on-top only)
+    player.onGround = false;
+    for (const p of platforms) {
+      const wasAbove = (player.y + player.h - player.vy) <= p.y + 2;
+      if (
+        player.vy >= 0 &&
+        wasAbove &&
+        player.x + player.w > p.x &&
+        player.x < p.x + p.w &&
+        player.y + player.h >= p.y &&
+        player.y + player.h <= p.y + p.h + 2
+      ) {
+        player.y = p.y - player.h;
+        player.vy = 0;
+        player.onGround = true;
+        player.jumpsLeft = player.maxJumps;
+      }
+    }
+
+    // Fall off bottom — respawn
+    if (player.y > H + 50) {
+      player.x = 30;
+      player.y = 300;
+      player.vx = 0;
+      player.vy = 0;
+    }
+
+    // Pickup collisions
+    for (const pu of pickups) {
+      if (!pu.collected && rectsOverlap(player.x, player.y, player.w, player.h, pu.x, pu.y - pu.h * 0.5, pu.w, pu.h)) {
+        pu.collected = true;
+        if (pu.id === 'boots') {
+          player.maxJumps = 2;
+          player.hasDoubleJump = true;
+          showFlash('Double Jump Unlocked!', C.boots);
+        }
+        if (pu.id === 'wand') {
+          player.hasWand = true;
+          showFlash('Shoot Unlocked! [Z]', C.wand);
+        }
+      }
+    }
+
+    // Shoot
+    if (keys['z'] || keys['Z']) {
+      if (!shootConsumed && player.hasWand) {
+        shootConsumed = true;
+        player.bullets.push({
+          x: player.x + (player.facingRight ? player.w + 2 : -8),
+          y: player.y + player.h * 0.4,
+          vx: player.facingRight ? 9 : -9,
+          active: true,
+        });
+      }
+    }
+
+    // Update bullets
+    for (const b of player.bullets) {
+      if (!b.active) continue;
+      b.x += b.vx;
+      if (b.x < -20 || b.x > W + 20) { b.active = false; continue; }
+
+      // Hit target
+      if (target.hp > 0 && rectsOverlap(b.x - 4, b.y - 3, 8, 6, target.x, target.y, target.w, target.h)) {
+        b.active = false;
+        target.hp--;
+        if (target.hp === 0) {
+          showFlash('Target Defeated!', '#ff8844');
+        }
+      }
+    }
+    player.bullets = player.bullets.filter(b => b.active);
+
+    // Flash message decay
+    if (flashTimer > 0) {
+      flashTimer--;
+      if (flashTimer === 20) {
+        flashEl.style.transition = 'opacity 0.4s';
+        flashEl.style.opacity = '0';
+      }
+    }
+
+    // Bob pickups
+    for (const pu of pickups) {
+      pu.bobOffset += 0.05;
+    }
+  }
+
+  // ─── Draw ────────────────────────────────────────────────────
+
+  function drawRoundRect(x, y, w, h, r, fill) {
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, r);
+    ctx.fillStyle = fill;
+    ctx.fill();
+  }
+
+  function draw() {
+    // Background
+    ctx.fillStyle = C.bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Background grid (subtle)
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+    ctx.lineWidth = 1;
+    for (let gx = 0; gx < W; gx += 40) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
+    for (let gy = 0; gy < H; gy += 40) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
+
+    // Platforms
+    for (const p of platforms) {
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, p.w, p.h);
+      // Top highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.08)';
+      ctx.fillRect(p.x, p.y, p.w, 2);
+    }
+
+    // Signs
+    for (const s of signs) {
+      ctx.fillStyle = s.color;
+      ctx.font = 'bold 10px Courier New';
+      ctx.textAlign = 'center';
+      ctx.fillText(s.text, s.x + 55, s.y);
+    }
+
+    // Pickups (bobbing)
+    for (const pu of pickups) {
+      if (pu.collected) continue;
+      const bob = Math.sin(pu.bobOffset) * 4;
+      const py = pu.y + bob;
+
+      // Glow
+      ctx.shadowColor = pu.glowColor;
+      ctx.shadowBlur = 14;
+      ctx.fillStyle = pu.color;
+      ctx.fillRect(pu.x, py - pu.h * 0.5, pu.w, pu.h);
+      ctx.shadowBlur = 0;
+
+      // Label
+      ctx.fillStyle = pu.color;
+      ctx.font = 'bold 9px Courier New';
+      ctx.textAlign = 'center';
+      ctx.fillText(pu.label, pu.x + pu.w / 2, py - pu.h * 0.5 - 12);
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.font = '8px Courier New';
+      ctx.fillText(pu.sublabel, pu.x + pu.w / 2, py - pu.h * 0.5 - 3);
+    }
+
+    // Target
+    {
+      const alive = target.hp > 0;
+      ctx.fillStyle = alive ? C.target : C.targetDead;
+      ctx.fillRect(target.x, target.y, target.w, target.h);
+
+      if (alive) {
+        // X face
+        ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(target.x + 6, target.y + 6); ctx.lineTo(target.x + target.w - 6, target.y + target.h - 6); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(target.x + target.w - 6, target.y + 6); ctx.lineTo(target.x + 6, target.y + target.h - 6); ctx.stroke();
+
+        // HP bar
+        ctx.fillStyle = '#333';
+        ctx.fillRect(target.x, target.y - 8, target.w, 5);
+        ctx.fillStyle = '#ff4444';
+        ctx.fillRect(target.x, target.y - 8, target.w * target.hp / target.maxHp, 5);
+        ctx.strokeStyle = '#555';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(target.x, target.y - 8, target.w, 5);
+      } else {
+        ctx.fillStyle = '#888';
+        ctx.font = 'bold 9px Courier New';
+        ctx.textAlign = 'center';
+        ctx.fillText('DEFEATED', target.x + target.w / 2, target.y + target.h + 12);
+      }
+
+      // Label above
+      if (alive) {
+        ctx.fillStyle = '#ff7777';
+        ctx.font = 'bold 9px Courier New';
+        ctx.textAlign = 'center';
+        ctx.fillText('TARGET', target.x + target.w / 2, target.y - 12);
+      }
+    }
+
+    // Bullets
+    ctx.shadowColor = '#ffff88';
+    ctx.shadowBlur = 6;
+    ctx.fillStyle = C.bullet;
+    for (const b of player.bullets) {
+      ctx.fillRect(b.x - 5, b.y - 2, 10, 4);
+    }
+    ctx.shadowBlur = 0;
+
+    // Player
+    {
+      // Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.3)';
+      ctx.fillRect(player.x + 2, player.y + player.h - 2, player.w - 4, 4);
+
+      // Body
+      ctx.fillStyle = C.player;
+      ctx.fillRect(player.x, player.y, player.w, player.h);
+
+      // Shine
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      ctx.fillRect(player.x + 2, player.y + 2, player.w * 0.4, player.h * 0.45);
+
+      // Eye
+      const eyeX = player.facingRight ? player.x + player.w - 8 : player.x + 4;
+      ctx.fillStyle = C.playerEye;
+      ctx.fillRect(eyeX, player.y + 7, 5, 5);
+      ctx.fillStyle = '#001133';
+      ctx.fillRect(eyeX + (player.facingRight ? 2 : 0), player.y + 8, 3, 3);
+
+      // Boots indicator (green feet when has double jump)
+      if (player.hasDoubleJump) {
+        ctx.fillStyle = C.boots;
+        ctx.fillRect(player.x + 2, player.y + player.h - 5, player.w - 4, 5);
+      }
+
+      // Wand indicator (orange on arm when has wand)
+      if (player.hasWand) {
+        const wristX = player.facingRight ? player.x + player.w - 3 : player.x - 3;
+        ctx.fillStyle = C.wand;
+        ctx.fillRect(wristX, player.y + 12, 6, 4);
+      }
+    }
+
+    // HUD
+    drawHUD();
+
+    // Minimap arrow showing right if not seen everything
+    if (!pickups[0].collected || !pickups[1].collected) {
+      const progress = pickups.filter(p => p.collected).length;
+      if (progress < 2) {
+        ctx.fillStyle = 'rgba(255,255,255,0.25)';
+        ctx.font = '11px Courier New';
+        ctx.textAlign = 'right';
+        ctx.fillText('explore -->', W - 8, H - 8);
+      }
+    }
+  }
+
+  function drawHUD() {
+    const hx = 8, hy = 8;
+    const hw = 195, hh = 84;
+
+    drawRoundRect(hx, hy, hw, hh, 4, C.hud);
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(hx, hy, hw, hh);
+
+    ctx.font = 'bold 11px Courier New';
+    ctx.textAlign = 'left';
+
+    // Jump
+    ctx.fillStyle = C.unlocked;
+    ctx.fillText('Jump:         UNLOCKED', hx + 10, hy + 20);
+
+    // Double jump
+    if (player.hasDoubleJump) {
+      ctx.fillStyle = C.boots;
+      ctx.fillText('Double Jump:  UNLOCKED', hx + 10, hy + 38);
+    } else {
+      ctx.fillStyle = C.locked;
+      ctx.fillText('Double Jump:  LOCKED', hx + 10, hy + 38);
+    }
+
+    // Wand / shoot
+    if (player.hasWand) {
+      ctx.fillStyle = C.wand;
+      ctx.fillText('Shoot [Z]:    UNLOCKED', hx + 10, hy + 56);
+    } else {
+      ctx.fillStyle = C.locked;
+      ctx.fillText('Shoot [Z]:    LOCKED', hx + 10, hy + 56);
+    }
+
+    // Jumps remaining pips
+    ctx.fillStyle = C.neutral;
+    ctx.font = '9px Courier New';
+    ctx.fillText(`Jumps left: ${player.jumpsLeft} / ${player.maxJumps}`, hx + 10, hy + 73);
+  }
+
+  // ─── Game loop ───────────────────────────────────────────────
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+</script>
+
+</body>
+</html>

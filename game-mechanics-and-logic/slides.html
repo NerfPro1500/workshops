@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Video Game Design: Mechanics and Logic</title>
+
+	<link rel="stylesheet" href="../assets/revealjs/reset.css">
+	<link rel="stylesheet" href="../assets/revealjs/reveal.css">
+	<link rel="stylesheet" href="../assets/revealjs/theme/black.css">
+
+	<link rel="stylesheet" href="../assets/revealjs/plugin/highlight/monokai.css">
+	<style>
+		.outlined {
+			text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black !important;
+		}
+
+		div.slide-background-content {
+			background-size: 900px 900px;
+			background-repeat: no-repeat;
+			background-position: center center;
+			opacity: 0.05;
+			background-image: url("../assets/images/logo-transparent.png");
+		}
+
+		.mechanic-tag {
+			display: inline-block;
+			padding: 4px 12px;
+			border-radius: 4px;
+			margin: 4px;
+			font-size: 0.75em;
+			font-weight: bold;
+		}
+
+		.tag-move { background: #2a6496; }
+		.tag-combat { background: #8b2222; }
+		.tag-collect { background: #4a7a2a; }
+		.tag-progress { background: #7a4a2a; }
+		.tag-social { background: #5a2a7a; }
+
+		.locked { color: #ff6666; }
+		.unlocked { color: #66ff99; }
+
+		.step-box {
+			border: 2px solid #555;
+			border-radius: 8px;
+			padding: 12px 20px;
+			margin: 8px 0;
+			text-align: left;
+			font-size: 0.8em;
+		}
+		.step-box .num {
+			font-size: 1.4em;
+			font-weight: bold;
+			color: #aaffcc;
+			margin-right: 8px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+
+			<!-- Title -->
+			<section data-background-image="../assets/images/logo-transparent.png" data-background-size="900px 900px"
+				data-background-opacity="0.7" data-background-repeat="no-repeat"
+				data-background-position="center center">
+				<h2 class="outlined">Video Game Design</h2>
+				<h3 class="outlined">Mechanics and Logic</h3>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p class="outlined">by Brendon Thiede</p>
+			</section>
+
+			<!-- Student Goals -->
+			<section>
+				<h2>Today's Goals</h2>
+				<ul>
+					<li>Name and describe different types of game mechanics</li>
+					<li>Explain <strong>progressive discovery</strong></li>
+					<li>Identify how a game teaches you something new</li>
+					<li>Design your own mechanic introduction</li>
+				</ul>
+				<p><small>No coding today — we are thinking like <strong>designers</strong>.</small></p>
+			</section>
+
+			<!-- Icebreaker -->
+			<section>
+				<h2>Icebreaker</h2>
+				<p>What is one game mechanic you love?</p>
+				<p><small>(double jump, dash, crafting, grapple, stealth, time rewind, wall run...)</small></p>
+			</section>
+
+			<!-- What is a mechanic -->
+			<section>
+				<section>
+					<h2>What is a Game Mechanic?</h2>
+					<p>A mechanic is a <strong>rule</strong> that defines what players can <strong>do</strong>.</p>
+					<p>Mechanics are the <em>verbs</em> of your game.</p>
+					<ul>
+						<li>Jump. Run. Shoot. Craft. Talk. Build. Rewind.</li>
+					</ul>
+					<p><small>Not the story. Not the art. Not the music. The <strong>rules</strong>.</small></p>
+				</section>
+				<section>
+					<h2>Mechanic vs. Story</h2>
+					<ul>
+						<li><strong>Story:</strong> "The hero must save the kingdom."</li>
+						<li><strong>Mechanic:</strong> "Press Space to jump over obstacles."</li>
+					</ul>
+					<p>A story can exist without mechanics (books, movies).</p>
+					<p>A game needs mechanics to be a game.</p>
+				</section>
+			</section>
+
+			<!-- Types of mechanics -->
+			<section>
+				<section>
+					<h2>Types of Mechanics</h2>
+					<p>Mechanics tend to fall into a few categories:</p>
+					<ul>
+						<li><span class="mechanic-tag tag-move">Movement</span> How the player gets around</li>
+						<li><span class="mechanic-tag tag-combat">Combat / Action</span> How players fight or interact</li>
+						<li><span class="mechanic-tag tag-collect">Collection / Economy</span> Resources, items, currency</li>
+						<li><span class="mechanic-tag tag-progress">Progression / Unlocking</span> Getting new abilities</li>
+						<li><span class="mechanic-tag tag-social">Social / Story</span> Choices, dialogue, relationships</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Movement Mechanics</h2>
+					<ul>
+						<li>Walk, run, crouch</li>
+						<li>Jump, double jump, wall jump</li>
+						<li>Dash, roll, slide</li>
+						<li>Swim, fly, grapple, glide</li>
+					</ul>
+					<p><small>Movement is usually the first mechanic players encounter.</small></p>
+				</section>
+				<section>
+					<h2>Progression / Unlocking</h2>
+					<ul>
+						<li>Find an item → gain a new ability</li>
+						<li>Level up → unlock a skill</li>
+						<li>Beat a boss → access a new area</li>
+						<li>New ability → old areas feel different</li>
+					</ul>
+					<p><small>Progression mechanics make players feel like they are <strong>growing</strong>.</small></p>
+				</section>
+				<section>
+					<h2>Can you name an example?</h2>
+					<p>For each category, name a game and mechanic:</p>
+					<table>
+						<tr><td><span class="mechanic-tag tag-move">Movement</span></td><td><span class="blank-line" style="border-bottom:1px solid #888;display:inline-block;width:300px">&nbsp;</span></td></tr>
+						<tr><td><span class="mechanic-tag tag-combat">Combat</span></td><td><span class="blank-line" style="border-bottom:1px solid #888;display:inline-block;width:300px">&nbsp;</span></td></tr>
+						<tr><td><span class="mechanic-tag tag-collect">Collection</span></td><td><span class="blank-line" style="border-bottom:1px solid #888;display:inline-block;width:300px">&nbsp;</span></td></tr>
+						<tr><td><span class="mechanic-tag tag-progress">Progression</span></td><td><span class="blank-line" style="border-bottom:1px solid #888;display:inline-block;width:300px">&nbsp;</span></td></tr>
+					</table>
+				</section>
+			</section>
+
+			<!-- How games teach -->
+			<section>
+				<section>
+					<h2>The Big Question</h2>
+					<p>How do games <strong>teach</strong> you mechanics...</p>
+					<p>...without being boring?</p>
+					<p><small>Nobody wants to read a manual. Nobody wants a tutorial that takes 20 minutes.</small></p>
+				</section>
+				<section>
+					<h2>Two Approaches</h2>
+					<div class="step-box" style="border-color:#ff6666">
+						<strong>The Tutorial Wall:</strong><br>
+						Screen appears. Text says: "You have unlocked the DOUBLE JUMP.
+						Press [Space] twice to double jump. Double jump can be used to
+						reach higher platforms. Double jump is now active."
+					</div>
+					<div class="step-box" style="border-color:#66ff99">
+						<strong>Progressive Discovery:</strong><br>
+						You find shiny boots. You pick them up. Suddenly there's a high
+						ledge in front of you. You jump. You jump again. You land on the
+						ledge. You feel clever.
+					</div>
+				</section>
+				<section>
+					<h2>Which feels better?</h2>
+					<p>The second one — and here's why:</p>
+					<ul>
+						<li>You <strong>discovered</strong> it, not read it</li>
+						<li>The world gave you a safe place to <strong>practice</strong></li>
+						<li>You felt like you <strong>figured it out</strong></li>
+					</ul>
+					<p><small>Players remember what they discover. They forget what they read.</small></p>
+				</section>
+			</section>
+
+			<!-- Metroid example -->
+			<section>
+				<section>
+					<h2>Case Study: Metroid</h2>
+					<p>Samus starts with basic moves — run and shoot.</p>
+					<p>Early areas: you can <strong>see places you can't reach</strong>.</p>
+					<p>You explore. You find an item. The world opens up.</p>
+				</section>
+				<section>
+					<h2>The Metroid Loop</h2>
+					<div class="step-box"><span class="num">1</span>You <strong>see</strong> an area you can't reach (curiosity)</div>
+					<div class="step-box"><span class="num">2</span>You find an <strong>item</strong> that grants a new ability (reward)</div>
+					<div class="step-box"><span class="num">3</span>You get to <strong>practice</strong> it in a safe spot (confidence)</div>
+					<div class="step-box"><span class="num">4</span>You use it to reach that area you saw earlier (payoff)</div>
+				</section>
+				<section>
+					<h2>Why it works</h2>
+					<ul>
+						<li>No tutorial needed — the world teaches you</li>
+						<li>Players feel <strong>clever</strong>, not taught</li>
+						<li>Every new ability makes old areas worth revisiting</li>
+						<li>Curiosity drives exploration — "What does this unlock?"</li>
+					</ul>
+					<p><small>This pattern is so influential it gave a whole genre its name: <strong>Metroidvania</strong>.</small></p>
+				</section>
+				<section>
+					<h2>Other Games That Do This</h2>
+					<ul>
+						<li><strong>Super Mario Bros.</strong> — First goomba is easy to jump over (no text needed)</li>
+						<li><strong>Celeste</strong> — Safe intro room teaches the dash before it matters</li>
+						<li><strong>Portal</strong> — First chamber is simple; you figure out portals by doing</li>
+						<li><strong>Hollow Knight</strong> — You find each movement ability and immediately see where to use it</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- Design principles -->
+			<section>
+				<h2>Designing for Discovery</h2>
+				<div class="step-box"><span class="num">1</span><strong>Show before require.</strong> Let players see the mechanic before they need it.</div>
+				<div class="step-box"><span class="num">2</span><strong>Safe practice first.</strong> First use should be low stakes — no punishment for failing.</div>
+				<div class="step-box"><span class="num">3</span><strong>Let them feel clever.</strong> Don't explain it. Let them discover it.</div>
+				<div class="step-box"><span class="num">4</span><strong>Reward curiosity.</strong> Exploring should always find something.</div>
+			</section>
+
+			<!-- Demo -->
+			<section>
+				<section>
+					<h2>Demo Time</h2>
+					<p>Open the <strong>Mechanics Demo</strong> game.</p>
+					<p>Play for a few minutes. Try to figure out what you can do.</p>
+					<p><small>Controls: Arrow Keys / WASD to move | Space to jump | Z to shoot</small></p>
+				</section>
+				<section>
+					<h2>While You Play — Watch For:</h2>
+					<ul>
+						<li>What mechanics are available at the <strong>start</strong>?</li>
+						<li>What changes as you <strong>explore</strong>?</li>
+						<li>Did the game <strong>tell</strong> you, or did you <strong>discover</strong> it?</li>
+						<li>What would you add <strong>next</strong>?</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Discussion</h2>
+					<ul>
+						<li>What could you do at the start?</li>
+						<li>What changed after you got the boots?</li>
+						<li>What was the boots placement trying to teach you?</li>
+						<li>What comes after the wand? (What would you design next?)</li>
+					</ul>
+				</section>
+			</section>
+
+			<!-- Design activity -->
+			<section>
+				<section>
+					<h2>Your Turn: Design an Introduction</h2>
+					<p>Groups of 2–3. Pick a mechanic. Design how a player would <strong>discover</strong> and <strong>learn</strong> it.</p>
+					<p><small>Use the worksheet — Part 4.</small></p>
+				</section>
+				<section>
+					<h2>Mechanic Ideas</h2>
+					<ul>
+						<li>Wall jump</li>
+						<li>Grapple hook</li>
+						<li>Time rewind</li>
+						<li>Invisibility</li>
+						<li>Shapeshifting</li>
+						<li>Crafting</li>
+						<li>Dialogue choices that change the story</li>
+						<li>Something completely new</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Design Questions to Answer</h2>
+					<div class="step-box"><span class="num">1</span>How does the player <strong>find</strong> the mechanic?</div>
+					<div class="step-box"><span class="num">2</span>Where do they <strong>practice</strong> it safely?</div>
+					<div class="step-box"><span class="num">3</span>What does it <strong>unlock</strong> or open up?</div>
+					<div class="step-box"><span class="num">4</span>What is one <strong>surprising</strong> use for it?</div>
+				</section>
+			</section>
+
+			<!-- Share out -->
+			<section>
+				<h2>Share Out</h2>
+				<p>Each group: 2 minutes.</p>
+				<ul>
+					<li>What is your mechanic?</li>
+					<li>How does the player discover it?</li>
+					<li>What does it open up?</li>
+				</ul>
+				<p><small>One question or "what if..." from the class after each share.</small></p>
+			</section>
+
+			<!-- Wrap-up -->
+			<section>
+				<section>
+					<h2>Wrap-Up</h2>
+					<ul>
+						<li>Mechanics are the <strong>verbs</strong> of a game</li>
+						<li>Great games teach through <strong>play</strong>, not paragraphs</li>
+						<li>Progressive discovery makes players feel <strong>clever</strong></li>
+						<li>You already have designer instincts — you've been playing games your whole life</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Watch for This</h2>
+					<p>Next time you play any game:</p>
+					<p>Watch the <strong>first 10 minutes</strong>.</p>
+					<p>That's usually the most carefully designed part of the whole game.</p>
+					<p><small>What mechanics does it introduce? How? When?</small></p>
+				</section>
+			</section>
+
+			<section>Questions?</section>
+
+			<section data-background-image="../assets/images/logo-transparent.png" data-background-size="900px 900px"
+				data-background-opacity="1" data-background-repeat="no-repeat" data-background-position="center center">
+				<h2 class="outlined"><em>Thank you!</em></h2>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+			</section>
+
+		</div>
+	</div>
+
+	<script src="../assets/revealjs/reveal.js"></script>
+	<script src="../assets/revealjs/plugin/notes/notes.js"></script>
+	<script src="../assets/revealjs/plugin/markdown/markdown.js"></script>
+	<script src="../assets/revealjs/plugin/highlight/highlight.js"></script>
+	<script>
+		Reveal.initialize({
+			hash: true,
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
+
+</html>

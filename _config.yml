@@ -173,6 +173,31 @@ navigation:
             url: /advanced-python/instructor-notes/common-questions
           - title: Timing Guide
             url: /advanced-python/instructor-notes/timing-guide
+  - title: Video Game Design - Mechanics and Logic
+    url: /game-mechanics-and-logic/
+    subnav:
+      - title: Slides
+        url: /game-mechanics-and-logic/slides.html
+      - title: Mechanics Demo Game
+        url: /game-mechanics-and-logic/example-game/
+      - title: Resources
+        items:
+          - title: Glossary
+            url: /game-mechanics-and-logic/resources/glossary
+          - title: Next Steps
+            url: /game-mechanics-and-logic/resources/next-steps
+      - title: Student Handouts
+        items:
+          - title: Vocabulary
+            url: /game-mechanics-and-logic/student-handouts/vocabulary
+          - title: Worksheet
+            url: /game-mechanics-and-logic/student-handouts/worksheet
+      - title: Instructor Notes
+        items:
+          - title: Common Questions
+            url: /game-mechanics-and-logic/instructor-notes/common-questions
+          - title: Timing Guide
+            url: /game-mechanics-and-logic/instructor-notes/timing-guide
   - title: Learning Checks
     url: /learning-checks
 
@@ -203,3 +228,7 @@ defaults:
       path: "sound-design-and-foley"
     values:
       workshop: "Sound Design and Foley"
+  - scope:
+      path: "game-mechanics-and-logic"
+    values:
+      workshop: "Video Game Design - Mechanics and Logic"
