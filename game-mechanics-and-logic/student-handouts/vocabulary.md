@@ -8,10 +8,6 @@ print_friendly: true
 
 # Mechanics and Logic Vocabulary
 
-Key terms for today's workshop.
-
----
-
 **mechanic** — A rule that defines what a player can do in a game.
 Examples: jumping, shooting, crafting, dashing.
 

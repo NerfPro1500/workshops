@@ -31,12 +31,7 @@ go next.
 
 ## If you want to go deeper on design
 
-- **Extra Credits (YouTube):** Short videos on game design concepts.
-  Look for episodes on "Juice," "Game Feel," and "Intentional Design."
-- **Mark Brown / Game Maker's Toolkit (YouTube):** Deep dives into specific
-  games and design patterns. "Boss Keys" series is great for Metroidvania fans.
-- **The Art of Game Design by Jesse Schell:** One of the most widely read books
-  on game design. Available at most libraries.
+- **[Mark Brown / Game Maker's Toolkit (YouTube):](https://www.youtube.com/@GMTK)** Deep dives into specific games and design patterns. "Boss Keys" series is great for Metroidvania fans.
 
 ## Mechanics to explore and prototype
 

@@ -8,10 +8,6 @@ print_friendly: true
 
 # Mechanics and Logic Workshop Worksheet
 
-Your name: <span class="blank-line"></span>
-
----
-
 ## Part 1: Mechanics Spotter
 
 Name a game you know. List **3 mechanics** from it (things the player can DO):
@@ -22,23 +18,15 @@ Game: <span class="blank-line-short"></span>
 2. <span class="blank-line"></span>
 3. <span class="blank-line"></span>
 
----
-
 ## Part 2: How Did You Learn It?
 
 Pick one mechanic from above. How did the game teach it to you?
 
-Mechanic: <span class="blank-line-short"></span>
-
-Circle one: &nbsp; **Tutorial text** &nbsp; | &nbsp; **Watching it happen** &nbsp; | &nbsp; **Just tried it** &nbsp; | &nbsp; **Someone told me**
+Tutorial \| Watching it happen \| Just tried it \| Someone told me
 
 Describe what happened when you first learned it:
 
 <span class="blank-line-long"></span>
-
-<span class="blank-line-long"></span>
-
----
 
 ## Part 3: Play the Demo
 
@@ -46,17 +34,11 @@ Open the Mechanics Demo game and play for a few minutes. Then answer:
 
 What mechanics did you notice? (List what changed as you played.)
 
-1. <span class="blank-line"></span>
-2. <span class="blank-line"></span>
-3. <span class="blank-line"></span>
+<span class="blank-line-long"></span>
 
 How did the game introduce the double jump? (What happened before you could use it?)
 
 <span class="blank-line-long"></span>
-
-<span class="blank-line-long"></span>
-
----
 
 ## Part 4: Design Your Own Introduction
 
@@ -80,14 +62,6 @@ My mechanic: <span class="blank-line-short"></span>
 
 <span class="blank-line-long"></span>
 
-**Bonus — What is one surprising or creative way to use your mechanic?**
-
-<span class="blank-line-long"></span>
-
----
-
-## Part 5: Share Out
+## Part 5: Share Time
 
 Write one thing you will say when you share your mechanic design with the group:
-
-<span class="blank-line-long"></span>
