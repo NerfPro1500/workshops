@@ -109,7 +109,7 @@ document.addEventListener('keyup', e => {
   if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
     jumpKeyPressedConsumed = false;
   }
-  if (e.key.toLowerCase() === 'z') {
+  if (e.key.toLowerCase() === 'z' || e.key === 'Control') {
     shootKeyConsumed = false;
   }
 });
@@ -209,7 +209,7 @@ function update() {
   }
 
   // Shoot
-  if (heldKeys['z'] || heldKeys['Z']) {
+  if (heldKeys['z'] || heldKeys['Z'] || heldKeys['Control']) {
     if (!shootKeyConsumed && player.hasWand) {
       shootKeyConsumed = true;
       player.bullets.push({
@@ -437,10 +437,10 @@ function drawHUD() {
   // Wand / shoot
   if (player.hasWand) {
     ctx.fillStyle = COLORS.wand;
-    ctx.fillText('Shoot [Z]:    UNLOCKED', hudX + 10, hudY + 56);
+    ctx.fillText('Shoot:        UNLOCKED', hudX + 10, hudY + 56);
   } else {
     ctx.fillStyle = COLORS.locked;
-    ctx.fillText('Shoot [Z]:    LOCKED', hudX + 10, hudY + 56);
+    ctx.fillText('Shoot:        LOCKED', hudX + 10, hudY + 56);
   }
 
   // Jumps remaining pips
