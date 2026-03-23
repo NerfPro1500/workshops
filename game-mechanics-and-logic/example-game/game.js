@@ -59,16 +59,11 @@ const platforms = [
   { x: 590, y: 280, w: 110, h: 12, color: COLORS.platformTarget }, // target platform
 ];
 
-// ─── Signs / hints in the world ──────────────────────────────
-const signs = [
-  { x: 430, y: 120, text: '? Need to jump higher ?', color: '#886644' },
-];
-
 // ─── Pickups ─────────────────────────────────────────────────
 const pickups = [
   {
     id: 'boots',
-    x: 272, y: 216,
+    x: 272, y: 196,
     w: 22, h: 22,
     color: COLORS.boots,
     glowColor: '#00ffcc',
@@ -79,7 +74,7 @@ const pickups = [
   },
   {
     id: 'wand',
-    x: 460, y: 84,
+    x: 460, y: 74,
     w: 22, h: 22,
     color: COLORS.wand,
     glowColor: '#ffcc44',
@@ -373,14 +368,6 @@ function draw() {
     // Top highlight
     ctx.fillStyle = 'rgba(255,255,255,0.08)';
     ctx.fillRect(platform.x, platform.y, platform.w, 2);
-  }
-
-  // Signs
-  for (const sign of signs) {
-    ctx.fillStyle = sign.color;
-    ctx.font = 'bold 10px Courier New';
-    ctx.textAlign = 'center';
-    ctx.fillText(sign.text, sign.x + 55, sign.y);
   }
 
   // Pickups (bobbing)
