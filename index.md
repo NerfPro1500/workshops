@@ -5,7 +5,7 @@ title: Home
 
 # Lansing Tech Studio Workshops
 
-Welcome to the Youth Tech Workshops series! These workshops are designed for students ages **12–14** with minimal prior programming experience.
+Welcome to the Youth Tech Workshops series! These workshops are designed for students ages **12-14** with minimal prior programming experience.
 
 ## Available Workshops
 
@@ -112,9 +112,9 @@ classes, modules, dictionaries, file I/O, and Git workflow.
 
 **Branding:** Lansing Tech Studio  
 **Theme:** Robot persona ("Lansing Techster" or just "Techster") is learning alongside students, and they help each other figure things out.  
-**Target Audience:** Ages 12–14, minimal prior programming experience  
+**Target Audience:** Ages 12-14, minimal prior programming experience  
 **Session Length:** 2 hours each  
-**Group Size:** 8–12 students per session  
+**Group Size:** 8-12 students per session  
 **Platforms:** Windows laptops (primary), Chromebooks (secondary)
 
 Workshops mix instruction and hands-on work. They slightly build on one another but are designed to be **primarily independent** so students may join at any point.
