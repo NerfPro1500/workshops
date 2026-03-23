@@ -33,16 +33,16 @@ const COLORS = {
 // ─── Platforms ───────────────────────────────────────────────
 // { x, y, w, h, color, label? }
 const platforms = [
-  { x: 0,   y: 370, w: CANVAS_WIDTH,   h: 30,  color: COLORS.ground },       // ground
-  { x: 60,  y: 300, w: 110, h: 12,  color: COLORS.platformLow },  // low left
-  { x: 240, y: 240, w: 100, h: 12,  color: COLORS.platformMid },  // mid (boots here)
-  { x: 430, y: 95,  w: 110, h: 12,  color: COLORS.platformHigh }, // high (needs double jump, wand here)
-  { x: 590, y: 280, w: 110, h: 12,  color: COLORS.platformTarget },// target platform
+  { x: 0, y: 370, w: CANVAS_WIDTH, h: 30, color: COLORS.ground }, // ground
+  { x: 60, y: 300, w: 110, h: 12, color: COLORS.platformLow }, // low left
+  { x: 240, y: 240, w: 100, h: 12, color: COLORS.platformMid }, // mid (boots here)
+  { x: 430, y: 95, w: 110, h: 12, color: COLORS.platformHigh }, // high (needs double jump, wand here)
+  { x: 590, y: 280, w: 110, h: 12, color: COLORS.platformTarget }, // target platform
 ];
 
 // ─── Signs / hints in the world ──────────────────────────────
 const signs = [
-  { x: 410, y: 80, text: '? Need to jump higher ?', color: '#886644' },
+  { x: 430, y: 120, text: '? Need to jump higher ?', color: '#886644' },
 ];
 
 // ─── Pickups ─────────────────────────────────────────────────
