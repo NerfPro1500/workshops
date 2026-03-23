@@ -109,7 +109,7 @@ document.addEventListener('keyup', e => {
   if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
     jumpKeyPressedConsumed = false;
   }
-  if (e.key === 'z' || e.key === 'Z') {
+  if (e.key.toLowerCase() === 'z') {
     shootKeyConsumed = false;
   }
 });
