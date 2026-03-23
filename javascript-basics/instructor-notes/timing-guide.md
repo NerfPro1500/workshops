@@ -7,11 +7,11 @@ section: Instructor Notes
 
 # JavaScript Basics Timing Guide (2 Hours)
 
-**Audience**: 12–14 year-olds, beginners or returning from Tech Fundamentals. \
+**Audience**: 12-14 year-olds, beginners or returning from Tech Fundamentals. \
 **Goal**: variables, console.log, creative coding confidence. \
 Keep energy positive and normalize errors.
 
-## 0:00–0:10 - Welcome & Code Confidence Icebreaker
+## 0:00-0:10 - Welcome & Code Confidence Icebreaker
 
 - **Objective**: lower anxiety about coding; set creative tone.
 - **Prompt**: "If you could program a robot to do one task for you, what would it be?"
@@ -19,7 +19,7 @@ Keep energy positive and normalize errors.
 - **Tip**: show the finished example first - "This is where you're headed today."
 - **Watch for**: students who missed Tech Fundamentals; pair with returning students if possible.
 
-## 0:10–0:25 - Environment Setup & Git Fork/Clone
+## 0:10-0:25 - Environment Setup & Git Fork/Clone
 
 - **Objective**: get starter code, verify Node.js works.
 - **Before workshop**: have repo URL prominently displayed.
@@ -38,7 +38,7 @@ Keep energy positive and normalize errors.
 - **Fallback**: GitHub Codespaces if local setup fails.
 - **Tip**: type slowly, narrate every action.
 
-## 0:25–0:45 - JavaScript & Your First Variables
+## 0:25-0:45 - JavaScript & Your First Variables
 
 - **Objective**: understand what JavaScript is, create first variables.
 - **Demo**: live code alongside students.
@@ -57,7 +57,7 @@ Keep energy positive and normalize errors.
   - Variable name typos (case sensitive!)
 - **Tip**: emphasize "variables don't do anything until you use them."
 
-## 0:45–1:05 - Console.log & Concatenation
+## 0:45-1:05 - Console.log & Concatenation
 
 - **Objective**: display output, combine strings.
 - **Key concept**: console.log is how we see our program working.
@@ -75,13 +75,13 @@ Keep energy positive and normalize errors.
   - Missing + between parts
   - Expecting variables to print without console.log
 
-## 1:05–1:15 - Break
+## 1:05-1:15 - Break
 
 - **Encourage**: stand up, stretch, eyes off screen.
 - **Optional**: coding riddle on screen for early returners.
 - **Tip**: this break is before the big project; use time to help struggling students catch up.
 
-## 1:15–1:25 - Project Introduction
+## 1:15-1:25 - Project Introduction
 
 - **Objective**: understand the mission, see the goal, plan approach.
 - **Critical**: set clear expectations - we're building incrementally.
@@ -93,7 +93,7 @@ Keep energy positive and normalize errors.
 - **Watch for**: students feeling overwhelmed by blank file.
 - **Tip**: remind them of the template structure and TODOs to guide them.
 
-## 1:25–1:45 - Hands-On: Building Dynamic Story
+## 1:25-1:45 - Hands-On: Building Dynamic Story
 
 - **Objective**: apply all concepts creatively.
 - **Your role**: circulate, encourage, debug together.
@@ -115,7 +115,7 @@ Keep energy positive and normalize errors.
   - Running from wrong directory
 - **Tip**: model reading error messages - "Let's look at what the computer is telling us."
 
-## 1:45–1:55 - Git Commit, Push & Show-and-Tell
+## 1:45-1:55 - Git Commit, Push & Show-and-Tell
 
 - **Objective**: save work, celebrate successes.
 - **Git flow**: walk through together as a group.
@@ -130,7 +130,7 @@ Keep energy positive and normalize errors.
 - **Fallback**: if git is problematic, students can do it at home; focus on celebration.
 - **Tip**: make show-and-tell low-pressure; emphasize no "best" story.
 
-## 1:55–2:00 - Wrap-Up & Teaser
+## 1:55-2:00 - Wrap-Up & Teaser
 
 - **Objective**: reflect, connect to next workshop.
 - **Prompts**:

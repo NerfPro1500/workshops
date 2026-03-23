@@ -7,11 +7,11 @@ section: Instructor Notes
 
 # Advanced Python Coding Timing Guide (2 Hours)
 
-**Audience**: 12–14 year-olds; some completed Python Intro, some are new. \
+**Audience**: 12-14 year-olds; some completed Python Intro, some are new. \
 **Goal**: lists, dicts, functions, a class, file I/O, and a working text RPG. \
 Instruction is ~20% — get students into the code as fast as possible.
 
-## 0:00–0:10 - Welcome & Icebreaker
+## 0:00-0:10 - Welcome & Icebreaker
 
 - **Objective**: prime creative thinking; lower the stakes.
 - **Prompt**: "If you were designing a video game, what is the first room the player starts in? Describe it in one sentence."
@@ -19,7 +19,7 @@ Instruction is ~20% — get students into the code as fast as possible.
 - **Show the finished game**: run `solution/game_example.py` for 60 seconds. "This is where you're headed."
 - **Watch for**: students new to the series — they can still complete the workshop with the starter code.
 
-## 0:10–0:25 - Environment Setup
+## 0:10-0:25 - Environment Setup
 
 - **Objective**: starter code running locally; Python verified.
 - **Before workshop**: repo URL on screen, QR code visible.
@@ -35,7 +35,7 @@ Instruction is ~20% — get students into the code as fast as possible.
 - **Fallback**: GitHub Codespaces; open terminal in the correct folder.
 - **Tip**: type slowly; show the game starting and quit right away to save time.
 
-## 0:25–0:45 - Lists & Dictionaries
+## 0:25-0:45 - Lists & Dictionaries
 
 - **Objective**: students can read and write list/dict syntax; understand how rooms are stored.
 - **Do NOT read the whole rooms dict aloud** — show 1 room and explain the pattern.
@@ -50,7 +50,7 @@ Instruction is ~20% — get students into the code as fast as possible.
   - Index starting at 0 surprises
   - Using `.` instead of `["key"]` to access a dict key (JavaScript habit)
 
-## 0:45–1:00 - Functions
+## 0:45-1:00 - Functions
 
 - **Objective**: students understand why functions exist and can call + modify one.
 - **Key demo**: show the same logic copy-pasted 3 times vs. wrapped in a function. "Which is easier to fix?"
@@ -65,13 +65,13 @@ Instruction is ~20% — get students into the code as fast as possible.
   - Confusing modifying `room['item']` (mutates the dict in place) — this is a feature, not a bug
   - Students trying to return from `take_item` when they should be modifying the dict directly
 
-## 1:00–1:10 - Break
+## 1:00-1:10 - Break
 
 - **Encourage**: stand up, stretch, eyes off screen.
 - **Optional**: riddle on screen — "What has rooms but no doors, exits but no walls? (A dictionary)"
 - **Tip**: use break time to help students who haven't gotten `take_item()` working yet.
 
-## 1:10–1:20 - Classes & Modules
+## 1:10-1:20 - Classes & Modules
 
 - **Objective**: students can read the Player class; implement two small methods.
 - **Keep it conceptual**: "A class is a blueprint. `Player("Alex")` builds one player from that blueprint."
@@ -85,7 +85,7 @@ Instruction is ~20% — get students into the code as fast as possible.
   - Defining methods outside the class (wrong indentation)
   - `__init__` spelling — easy to get the underscores wrong
 
-## 1:20–1:25 - File I/O (Save Game)
+## 1:20-1:25 - File I/O (Save Game)
 
 - **Objective**: students see save/load working; understand the "why" immediately.
 - **Demo only** — do not have students write this from scratch; it's already in the starter.
@@ -96,7 +96,7 @@ Instruction is ~20% — get students into the code as fast as possible.
   4. Briefly show `savegame.json` in VS Code — "Python wrote this file"
 - **Tip**: this moment lands well — students immediately see why it matters. Keep it short.
 
-## 1:25–1:45 - Hands-On Build Time
+## 1:25-1:45 - Hands-On Build Time
 
 - **Objective**: working game with their own rooms; TODOs completed.
 - **Your role**: circulate, unblock, encourage — do not write code for students.
@@ -115,9 +115,9 @@ Instruction is ~20% — get students into the code as fast as possible.
   - `AttributeError` — method missing `self` parameter
   - `IndentationError` — code outside/inside class at wrong level
   - `json.JSONDecodeError` — corrupted save file; delete `savegame.json`
-- **Watch for**: silent struggling — check in proactively every 3–4 minutes.
+- **Watch for**: silent struggling — check in proactively every 3-4 minutes.
 
-## 1:45–1:55 - Git Commit, Push & Show-and-Tell
+## 1:45-1:55 - Git Commit, Push & Show-and-Tell
 
 - **Objective**: work saved; peers inspired by each other's rooms and features.
 - **Git flow**:
@@ -130,7 +130,7 @@ Instruction is ~20% — get students into the code as fast as possible.
 - **Celebrate**: creative room names, unexpected commands, funny item names.
 - **Watch for**: git auth errors or wrong directory — help individually, don't delay show-and-tell.
 
-## 1:55–2:00 - Wrap-Up
+## 1:55-2:00 - Wrap-Up
 
 - **Objective**: reflect; connect to real-world Python.
 - **Prompts**:

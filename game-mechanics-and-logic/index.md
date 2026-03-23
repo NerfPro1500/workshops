@@ -51,15 +51,15 @@ that students can play to observe mechanics in action. The focus is on
 
 ## 4. Workshop Agenda
 
-| Time | Activity |
-|------|----------|
-| 0:00–0:10 | Welcome, icebreaker: favorite mechanic |
-| 0:10–0:25 | What are mechanics? Categories + examples |
-| 0:25–0:40 | How games teach: progressive discovery (Metroid example) |
-| 0:40–1:00 | Play the Mechanics Demo — observe and discuss |
-| 1:00–1:30 | Group activity: design a mechanic introduction |
-| 1:30–1:50 | Share out + class discussion |
-| 1:50–2:00 | Wrap-up and next steps |
+| Time      | Activity                                                 |
+| --------- | -------------------------------------------------------- |
+| 0:00-0:10 | Welcome, icebreaker: favorite mechanic                   |
+| 0:10-0:25 | What are mechanics? Categories + examples                |
+| 0:25-0:40 | How games teach: progressive discovery (Metroid example) |
+| 0:40-1:00 | Play the Mechanics Demo — observe and discuss            |
+| 1:00-1:30 | Group activity: design a mechanic introduction           |
+| 1:30-1:50 | Share out + class discussion                             |
+| 1:50-2:00 | Wrap-up and next steps                                   |
 
 ## 5. Materials
 

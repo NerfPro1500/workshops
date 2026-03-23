@@ -7,11 +7,11 @@ section: Instructor Notes
 
 # Python Coding Introduction Timing Guide (2 Hours)
 
-**Audience**: 12–14 year-olds, beginners or returning from previous workshops. \
+**Audience**: 12-14 year-olds, beginners or returning from previous workshops. \
 **Goal**: variables, print(), input(), f-strings, if/else, creative coding confidence. \
 Keep energy positive and normalize errors.
 
-## 0:00–0:10 - Welcome & Code Confidence Icebreaker
+## 0:00-0:10 - Welcome & Code Confidence Icebreaker
 
 - **Objective**: lower anxiety about coding; set interactive tone.
 - **Prompt**: "If your computer could talk back to you, what's the first thing you'd want it to say?"
@@ -19,7 +19,7 @@ Keep energy positive and normalize errors.
 - **Tip**: show the finished example first - "This is where you're headed today."
 - **Watch for**: students new to the series; pair with returning students if possible.
 
-## 0:10–0:25 - Environment Setup & Git Fork/Clone
+## 0:10-0:25 - Environment Setup & Git Fork/Clone
 
 - **Objective**: get starter code, verify Python works.
 - **Before workshop**: have repo URL prominently displayed.
@@ -39,7 +39,7 @@ Keep energy positive and normalize errors.
 - **Fallback**: GitHub Codespaces if local setup fails.
 - **Tip**: type slowly, narrate every action.
 
-## 0:25–0:45 - Python & Your First Variables
+## 0:25-0:45 - Python & Your First Variables
 
 - **Objective**: understand what Python is, create first variables.
 - **Demo**: live code alongside students.
@@ -58,7 +58,7 @@ Keep energy positive and normalize errors.
   - Variable name typos (case sensitive!)
 - **Tip**: emphasize how clean Python looks compared to other languages.
 
-## 0:45–1:05 - print(), input(), and f-strings
+## 0:45-1:05 - print(), input(), and f-strings
 
 - **Objective**: display output, get user input, format strings.
 - **Key concept**: print() talks TO the user, input() listens FROM the user.
@@ -80,13 +80,13 @@ Keep energy positive and normalize errors.
   - Missing parentheses on print() or input()
   - Not saving before running
 
-## 1:05–1:15 - Break
+## 1:05-1:15 - Break
 
 - **Encourage**: stand up, stretch, eyes off screen.
 - **Optional**: coding riddle on screen for early returners.
 - **Tip**: this break is before the big project; use time to help struggling students catch up.
 
-## 1:15–1:25 - Project Introduction
+## 1:15-1:25 - Project Introduction
 
 - **Objective**: understand the mission, learn if/else, plan approach.
 - **Critical**: teach if/else clearly before hands-on time.
@@ -103,7 +103,7 @@ Keep energy positive and normalize errors.
   - Using `=` instead of `==`
 - **Tip**: draw the if/else branching on a whiteboard if available.
 
-## 1:25–1:45 - Hands-On: Building Text Adventure
+## 1:25-1:45 - Hands-On: Building Text Adventure
 
 - **Objective**: apply all concepts creatively.
 - **Your role**: circulate, encourage, debug together.
@@ -125,7 +125,7 @@ Keep energy positive and normalize errors.
   - Running from wrong directory
 - **Tip**: model reading error messages - "Let's look at what Python is telling us."
 
-## 1:45–1:55 - Git Commit, Push & Show-and-Tell
+## 1:45-1:55 - Git Commit, Push & Show-and-Tell
 
 - **Objective**: save work, celebrate successes.
 - **Git flow**: walk through together as a group.
@@ -140,7 +140,7 @@ Keep energy positive and normalize errors.
 - **Fallback**: if git is problematic, students can do it at home; focus on celebration.
 - **Tip**: make show-and-tell low-pressure; emphasize no "best" adventure.
 
-## 1:55–2:00 - Wrap-Up & Teaser
+## 1:55-2:00 - Wrap-Up & Teaser
 
 - **Objective**: reflect, connect to next workshop.
 - **Prompts**:
