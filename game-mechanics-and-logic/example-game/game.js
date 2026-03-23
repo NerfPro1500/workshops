@@ -103,7 +103,7 @@ const player = {
   w: 22, h: 28,
   vx: 0, vy: 0,
   onGround: false,
-  jumpsLeft: 1,
+  jumpsRemaining: 1,
   maxJumps: 1,
   hasDoubleJump: false,
   hasWand: false,
@@ -139,6 +139,15 @@ document.addEventListener('keyup', e => {
 // ─── Flash message ───────────────────────────────────────────
 let flashFramesRemaining = 0;
 
+/**
+ * Displays a temporary flash message on screen (e.g. "Double Jump Unlocked!").
+ * Sets the message text and color, makes it fully visible, then starts a
+ * countdown timer. After 100 frames the message begins fading out over 20
+ * frames. The fade-out logic lives in update().
+ *
+ * @param {string} text  - The message to display.
+ * @param {string} color - CSS color string for the message text.
+ */
 function showFlash(text, color) {
   flashMessageEl.textContent = text;
   flashMessageEl.style.color = color;
@@ -147,14 +156,49 @@ function showFlash(text, color) {
 }
 
 // ─── Collision helpers ───────────────────────────────────────
-// Returns true if two rectangles overlap.
-// Each rectangle is described by its top-left corner (x, y), width (w), and height (h).
-// This technique is called AABB (Axis-Aligned Bounding Box) collision detection.
+/**
+ * Returns true if two axis-aligned rectangles overlap (AABB collision detection).
+ * Each rectangle is described by its top-left corner (x, y), width (w), and
+ * height (h). The check works by testing whether the rectangles do NOT miss
+ * each other on every axis — if none of the four "gap" conditions are true,
+ * the rectangles must be overlapping.
+ *
+ * Used for player-vs-platform, player-vs-pickup, and bullet-vs-target checks.
+ *
+ * @param {number} ax - Left edge of rectangle A.
+ * @param {number} ay - Top edge of rectangle A.
+ * @param {number} aw - Width of rectangle A.
+ * @param {number} ah - Height of rectangle A.
+ * @param {number} bx - Left edge of rectangle B.
+ * @param {number} by - Top edge of rectangle B.
+ * @param {number} bw - Width of rectangle B.
+ * @param {number} bh - Height of rectangle B.
+ * @returns {boolean} True if the two rectangles overlap.
+ */
 function rectsOverlap(ax, ay, aw, ah, bx, by, bw, bh) {
   return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
 }
 
 // ─── Update ──────────────────────────────────────────────────
+/**
+ * Runs one frame of game logic. Called once per frame before draw().
+ *
+ * Responsibilities (in order):
+ * 1. Reads held keys to set horizontal velocity and facing direction.
+ * 2. Handles jumping — checks the consumed flag so holding the key
+ *    doesn't repeat, decrements jumpsRemaining on each jump.
+ * 3. Applies gravity and caps falling speed at TERMINAL_VELOCITY.
+ * 4. Moves the player on X then Y, clamping X to the canvas bounds.
+ * 5. Resolves platform collisions (land-on-top only) — resets jumpsRemaining
+ *    when the player lands.
+ * 6. Respawns the player if they fall off the bottom of the screen.
+ * 7. Checks pickup collisions — collecting boots grants double jump,
+ *    collecting the wand enables shooting.
+ * 8. Fires bullets when the shoot key is pressed (if the wand is owned).
+ * 9. Moves active bullets and tests them against the target for hits.
+ * 10. Ticks down the flash-message timer and triggers its fade-out.
+ * 11. Advances the bob offset on uncollected pickups so they animate.
+ */
 function update() {
 
   // Player movement
@@ -170,10 +214,10 @@ function update() {
 
   // Jump
   const jumpKeyPressed = heldKeys[' '] || heldKeys['ArrowUp'] || heldKeys['w'] || heldKeys['W'];
-  if (jumpKeyPressed && !jumpKeyPressedConsumed && player.jumpsLeft > 0) {
+  if (jumpKeyPressed && !jumpKeyPressedConsumed && player.jumpsRemaining > 0) {
     jumpKeyPressedConsumed = true;
     player.vy = JUMP_FORCE;
-    player.jumpsLeft--;
+    player.jumpsRemaining--;
   }
 
   // Gravity
@@ -204,7 +248,7 @@ function update() {
       player.y = platform.y - player.h;
       player.vy = 0;
       player.onGround = true;
-      player.jumpsLeft = player.maxJumps;
+      player.jumpsRemaining = player.maxJumps;
     }
   }
 
@@ -279,6 +323,17 @@ function update() {
 
 // ─── Draw ────────────────────────────────────────────────────
 
+/**
+ * Draws a filled, rounded rectangle on the canvas.
+ * Used by the HUD panel to create a soft-cornered background box.
+ *
+ * @param {number} x    - Left edge of the rectangle.
+ * @param {number} y    - Top edge of the rectangle.
+ * @param {number} w    - Width of the rectangle.
+ * @param {number} h    - Height of the rectangle.
+ * @param {number} r    - Corner radius in pixels.
+ * @param {string} fill - CSS color string used to fill the rectangle.
+ */
 function drawRoundRect(x, y, w, h, r, fill) {
   ctx.beginPath();
   ctx.roundRect(x, y, w, h, r);
@@ -286,6 +341,20 @@ function drawRoundRect(x, y, w, h, r, fill) {
   ctx.fill();
 }
 
+/**
+ * Renders one frame of the game world. Called once per frame after update().
+ *
+ * Draws every visual element in back-to-front (painter's algorithm) order:
+ * 1. Dark background fill and subtle grid lines.
+ * 2. Platforms with a thin top-edge highlight.
+ * 3. Sign text hints placed in the world.
+ * 4. Uncollected pickups with a glow effect and bobbing animation.
+ * 5. The target enemy (with an HP bar when alive, "DEFEATED" text when dead).
+ * 6. Player bullets with a yellow glow.
+ * 7. The player character — body, eye, and optional boot/wand indicators.
+ * 8. The HUD overlay (via drawHUD()).
+ * 9. A small "explore -->" nudge arrow until all pickups are collected.
+ */
 function draw() {
   // Background
   ctx.fillStyle = COLORS.bg;
@@ -431,6 +500,19 @@ function draw() {
   }
 }
 
+/**
+ * Renders the HUD (Heads-Up Display) showing player abilities and status.
+ * Displays a rounded rectangle panel in the top-left corner containing:
+ * - Jump ability status (always unlocked)
+ * - Double Jump ability status (locked/unlocked based on player.hasDoubleJump)
+ * - Shoot ability status (locked/unlocked based on player.hasWand)
+ * - Remaining jumps counter showing current jumps left vs maximum jumps
+ * 
+ * The HUD uses color coding to indicate ability status:
+ * - Unlocked abilities display in their respective colors (boots, wand)
+ * - Locked abilities display in the locked color
+ * - Jump counter displays in neutral color
+ */
 function drawHUD() {
   const hudX = 8, hudY = 8;
   const hudWidth = 195, hudHeight = 84;
@@ -465,13 +547,19 @@ function drawHUD() {
     ctx.fillText('Shoot:        LOCKED', hudX + 10, hudY + 56);
   }
 
-  // Jumps remaining pips
+  // Jumps remaining counter
   ctx.fillStyle = COLORS.neutral;
   ctx.font = '9px Courier New';
-  ctx.fillText(`Jumps left: ${player.jumpsLeft} / ${player.maxJumps}`, hudX + 10, hudY + 73);
+  ctx.fillText(`Jumps left: ${player.jumpsRemaining} / ${player.maxJumps}`, hudX + 10, hudY + 73);
 }
 
 // ─── Game loop ───────────────────────────────────────────────
+/**
+ * The main game loop. Calls update() to advance game state, then draw()
+ * to render the current frame. Schedules the next frame with
+ * requestAnimationFrame, which typically runs at about 60 frames per second (fps) and
+ * automatically pauses when the browser tab is not visible.
+ */
 function gameLoop() {
   update();
   draw();
