@@ -5,13 +5,13 @@ title: Youth Tech Workshops
 
 <https://lansingtechstudio.org/workshops/>
 
-# Youth Tech Workshops – Design Charter
+# Youth Tech Workshops - Design Charter
 
 ## Overview
 
-A series of five 2-hour technology workshops for students ages **12–14** with minimal prior programming experience. Workshops mix instruction and hands-on work, slightly build on one another, but are designed to be **primarily independent** so students may join at any point.
+A series of five 2-hour technology workshops for students ages **12-14** with minimal prior programming experience. Workshops mix instruction and hands-on work, slightly build on one another, but are designed to be **primarily independent** so students may join at any point.
 
-**Branding:** Lansing Tech Studio  \
+**Branding:** Lansing Tech Studio \
 **Theme:** Robot persona ("Lansing Techster" or just "Techster") is learning alongside students, and they help each other figure things out. \
 **Platforms:** Windows laptops (primary), Chromebooks (secondary)
 
@@ -19,14 +19,14 @@ A series of five 2-hour technology workshops for students ages **12–14** with 
 
 ## Workshops
 
-1. [Tech Fundamentals]({{ site.baseurl }}/tech-fundamentals/) – 1/15/2026
-2. JavaScript Basics – 1/22/2026
-3. Interactive HTML + JavaScript – 2/5/2026
-4. Python Coding Introduction – 2/19/2026
+1. [Tech Fundamentals]({{ site.baseurl }}/tech-fundamentals/) - 1/15/2026
+2. JavaScript Basics - 1/22/2026
+3. Interactive HTML + JavaScript - 2/5/2026
+4. Python Coding Introduction - 2/19/2026
 5. Digital Art & Animation - 2/26/2026
-6. AI Playground for Kids – 3/5/2026
+6. AI Playground for Kids - 3/5/2026
 7. Sound Design and Foley - 3/12/2026
-8. Advanced Python Coding – 3/19/2026
+8. Advanced Python Coding - 3/19/2026
 9. Video Game Design - Mechanics and Logic - 3/26/2026
 10. Video Production - 4/2/2026
 
