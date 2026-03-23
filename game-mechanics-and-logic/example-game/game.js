@@ -2,12 +2,31 @@ const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const flashMessageEl = document.getElementById('flash-message');
 
-// ─── Constants ───────────────────────────────────────────────
+// ─── Canvas size ─────────────────────────────────────────────
 const CANVAS_WIDTH = canvas.width;
 const CANVAS_HEIGHT = canvas.height;
+
+// ─── Game feel — try changing these! ─────────────────────────
+// GRAVITY: how fast the player accelerates downward each frame
+//   lower (0.2) = floaty   |   higher (0.8) = heavy and snappy
 const GRAVITY = 0.45;
+
+// JUMP_FORCE: upward push applied when jumping (negative = up)
+//   less negative (-8) = low hop   |   more negative (-14) = high leap
+//   note: double jump uses the same force — change it in update() to differ
 const JUMP_FORCE = -10.5;
+
+// TERMINAL_VELOCITY: maximum falling speed (caps the downward velocity)
+//   lower (8) = slow fall, more float time   |   higher (20) = fast plummet
+const TERMINAL_VELOCITY = 14;
+
+// SPEED: horizontal movement speed in pixels per frame
+//   lower (2) = slow crawl   |   higher (5) = quick dash
 const SPEED = 3.2;
+
+// BULLET_SPEED: how fast a bullet travels per frame
+//   lower (5) = slow projectile   |   higher (14) = instant-feeling shot
+const BULLET_SPEED = 9;
 
 // ─── Colors ──────────────────────────────────────────────────
 const COLORS = {
@@ -67,7 +86,7 @@ const pickups = [
     label: 'WAND',
     sublabel: 'Shoot [Z]',
     collected: false,
-    bobOffset: Math.PI, // phase offset so they bob out of sync
+    bobOffset: Math.PI, // start halfway through the bob cycle so the two pickups bob out of sync with each other
   },
 ];
 
@@ -93,7 +112,10 @@ const player = {
 };
 
 // ─── Input ───────────────────────────────────────────────────
-const heldKeys = {};
+const heldKeys = {}; // tracks which keys are currently held down
+
+// "Consumed" flags prevent holding a key from firing repeatedly.
+// When the key is released, the flag resets and the action can fire again.
 let jumpKeyPressedConsumed = false;
 let shootKeyConsumed = false;
 
@@ -125,15 +147,15 @@ function showFlash(text, color) {
 }
 
 // ─── Collision helpers ───────────────────────────────────────
+// Returns true if two rectangles overlap.
+// Each rectangle is described by its top-left corner (x, y), width (w), and height (h).
+// This technique is called AABB (Axis-Aligned Bounding Box) collision detection.
 function rectsOverlap(ax, ay, aw, ah, bx, by, bw, bh) {
   return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
 }
 
 // ─── Update ──────────────────────────────────────────────────
-let tick = 0;
-
 function update() {
-  tick++;
 
   // Player movement
   player.vx = 0;
@@ -156,7 +178,7 @@ function update() {
 
   // Gravity
   player.vy += GRAVITY;
-  if (player.vy > 14) player.vy = 14; // terminal velocity
+  if (player.vy > TERMINAL_VELOCITY) player.vy = TERMINAL_VELOCITY; // cap falling speed
 
   // Move X
   player.x += player.vx;
@@ -168,6 +190,8 @@ function update() {
   // Platform collisions (land-on-top only)
   player.onGround = false;
   for (const platform of platforms) {
+    // Check where the player's feet were *last frame* to avoid clipping through thin platforms.
+    // The +2 is a small tolerance for fast movement.
     const wasAbove = (player.y + player.h - player.vy) <= platform.y + 2;
     if (
       player.vy >= 0 &&
@@ -213,9 +237,9 @@ function update() {
     if (!shootKeyConsumed && player.hasWand) {
       shootKeyConsumed = true;
       player.bullets.push({
-        x: player.x + (player.facingRight ? player.w + 2 : -8),
-        y: player.y + player.h * 0.4,
-        vx: player.facingRight ? 9 : -9,
+        x: player.x + (player.facingRight ? player.w + 2 : -8), // spawn just outside the player
+        y: player.y + player.h * 0.4,                           // roughly at arm height
+        vx: player.facingRight ? BULLET_SPEED : -BULLET_SPEED,  // direction matches facing
         active: true,
       });
     }
@@ -313,7 +337,7 @@ function draw() {
     ctx.fillText(pickup.sublabel, pickup.x + pickup.w / 2, bobbingY - pickup.h * 0.5 - 3);
   }
 
-  // Target
+  // Target — bare { } block keeps local variables like isAlive scoped here only
   {
     const isAlive = target.hp > 0;
     ctx.fillStyle = isAlive ? COLORS.target : COLORS.targetDead;
@@ -359,7 +383,7 @@ function draw() {
   }
   ctx.shadowBlur = 0;
 
-  // Player
+  // Player — bare { } block keeps local variables like eyeX and wristX scoped here only
   {
     // Shadow
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
@@ -397,15 +421,13 @@ function draw() {
   // HUD
   drawHUD();
 
-  // Minimap arrow showing right if not seen everything
-  if (!pickups[0].collected || !pickups[1].collected) {
-    const collectedCount = pickups.filter(pickup => pickup.collected).length;
-    if (collectedCount < pickups.length) {
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.font = '11px Courier New';
-      ctx.textAlign = 'right';
-      ctx.fillText('explore -->', CANVAS_WIDTH - 8, CANVAS_HEIGHT - 8);
-    }
+  // Nudge arrow — disappears once all pickups are collected
+  const allPickupsCollected = pickups.every(pickup => pickup.collected);
+  if (!allPickupsCollected) {
+    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.font = '11px Courier New';
+    ctx.textAlign = 'right';
+    ctx.fillText('explore -->', CANVAS_WIDTH - 8, CANVAS_HEIGHT - 8);
   }
 }
 
