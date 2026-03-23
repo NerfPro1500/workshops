@@ -10,30 +10,30 @@ comments: true
 **Audience:** Beginners with little to no programming experience \\
 **Theme:** _"How computers actually work, and how you control them"_
 
-* <a href="https://youtu.be/D_QRIGQ-vqo"><img src="{{ site.baseurl }}/assets/icons/youtube.svg" alt="" style="height:1em;vertical-align:middle;margin-right:4px">Recording</a>
-* [Slides]({{ site.baseurl }}/tech-fundamentals/slides.html)
-* Resources:
-  * [Glossary]({{ site.baseurl }}/tech-fundamentals/resources/glossary)
-  * [Next Steps After Tech Fundamentals]({{ site.baseurl }}/tech-fundamentals/resources/next-steps)
-* Student Handouts:
-  * [Vocabulary Handout]({{ site.baseurl }}/tech-fundamentals/student-handouts/vocabulary)
-  * [Worksheet Handout]({{ site.baseurl }}/tech-fundamentals/student-handouts/worksheet)
-* Instructor Notes:
-  * [Common Questions]({{ site.baseurl }}/tech-fundamentals/instructor-notes/common-questions)
-  * [Timing Guide]({{ site.baseurl }}/tech-fundamentals/instructor-notes/timing-guide)
+- <a href="https://youtu.be/D_QRIGQ-vqo"><img src="{{ site.baseurl }}/assets/icons/youtube.svg" alt="" style="height:1em;vertical-align:middle;margin-right:4px">Recording</a>
+- [Slides]({{ site.baseurl }}/tech-fundamentals/slides.html)
+- Resources:
+  - [Glossary]({{ site.baseurl }}/tech-fundamentals/resources/glossary)
+  - [Next Steps After Tech Fundamentals]({{ site.baseurl }}/tech-fundamentals/resources/next-steps)
+- Student Handouts:
+  - [Vocabulary Handout]({{ site.baseurl }}/tech-fundamentals/student-handouts/vocabulary)
+  - [Worksheet Handout]({{ site.baseurl }}/tech-fundamentals/student-handouts/worksheet)
+- Instructor Notes:
+  - [Common Questions]({{ site.baseurl }}/tech-fundamentals/instructor-notes/common-questions)
+  - [Timing Guide]({{ site.baseurl }}/tech-fundamentals/instructor-notes/timing-guide)
 
 ## 1. Workshop Goals
 
 By the end of this workshop, every student should be able to:
 
-* Explain (in simple terms) what a computer does and how software fits in
-* Comfortably use:
-  * A web browser
-  * A file system (folders, files, extensions)
-  * A text editor (vs word processor)
-* Understand what code is, even if they don't write much yet
-* Successfully run a few simple commands in a terminal or web-based shell
-* Leave feeling confident, curious, and not intimidated
+- Explain (in simple terms) what a computer does and how software fits in
+- Comfortably use:
+  - A web browser
+  - A file system (folders, files, extensions)
+  - A text editor (vs word processor)
+- Understand what code is, even if they don't write much yet
+- Successfully run a few simple commands in a terminal or web-based shell
+- Leave feeling confident, curious, and not intimidated
 
 This workshop is about confidence and mental models, not speed or depth.
 
@@ -47,127 +47,127 @@ A student is successful if they can say:
 
 ### Primary Path (Preferred)
 
-* Local laptop
-  * Windows: File Explorer + Notepad / VS Code (if installed)
-  * Chromebook:
-    * Chrome browser
-    * Linux enabled or
-  * Browser-only fallback
+- Local laptop
+  - Windows: File Explorer + Notepad / VS Code (if installed)
+  - Chromebook:
+    - Chrome browser
+    - Linux enabled or
+  - Browser-only fallback
 
 ### Fallback Path (Guaranteed)
 
-* Browser-based editor:
-  * GitHub Codespaces (browser-based; be mindful of [free quota](https://docs.github.com/en/billing/concepts/product-billing/github-codespaces#free-quota) limits)
+- Browser-based editor:
+  - GitHub Codespaces (browser-based; be mindful of [free quota](https://docs.github.com/en/billing/concepts/product-billing/github-codespaces#free-quota) limits)
 
 ## 4. 2-Hour Agenda (Minute-by-Minute)
 
-### 0:00–0:10 - Welcome & Comfort Icebreaker
+### 0:00-0:10 - Welcome & Comfort Icebreaker
 
 > Low-pressure, introvert-friendly
 
-* Prompt (verbal or written):
-  * > "What's one thing you've used a computer for this week?"
-* Emphasize:
-  * No wrong answers
-  * No one is behind
-  * Curiosity beats correctness
+- Prompt (verbal or written):
+  > "What's one thing you've used a computer for this week?"
+- Emphasize:
+  - No wrong answers
+  - No one is behind
+  - Curiosity beats correctness
 
-### 0:10–0:30 - What Is a Computer, Really?
+### 0:10-0:30 - What Is a Computer, Really?
 
 > Conceptual, visual, interactive
 
 Topics:
 
-* Hardware vs Software
-* CPU = thinking
-* Memory = short-term notes
-* Storage = long-term memory
-* Programs = instructions
-  * Interesting programs need data. How does data get from storage to memory to CPU?
+- Hardware vs Software
+- CPU = thinking
+- Memory = short-term notes
+- Storage = long-term memory
+- Programs = instructions
+  - Interesting programs need data. How does data get from storage to memory to CPU?
 
 Activity:
 
-* Paper exercise:
-  * > "Circle which of these are hardware vs software"
-* Analogy-based discussion (recipes, LEGO instructions, game rules)
+- Paper exercise:
+  > "Circle which of these are hardware vs software"
+- Analogy-based discussion (recipes, LEGO instructions, game rules)
 
-### 0:30–0:50 - Files, Folders, and Extensions
+### 0:30-0:50 - Files, Folders, and Extensions
 
 > Hands-on
 
 Teach:
 
-* What a file is
-* What a folder is
-* Why `.txt`, `.html`, `.js`, `.py` matter
-* Why computers care about extensions
+- What a file is
+- What a folder is
+- Why `.txt`, `.html`, `.js`, `.py` matter
+- Why computers care about extensions
 
 Activity:
 
-* Create a folder:
+- Create a folder:
 
   ```bash
   Tech-Workshop-1/
   ```
 
-* Inside it:
-  * `notes.txt`
-  * `about-me.txt`
-* Rename files and observe behavior
+- Inside it:
+  - `notes.txt`
+  - `about-me.txt`
+- Rename files and observe behavior
 
 Key takeaway:
 
 > "Files don't do anything until a program reads them."
 
-### 0:50–1:10 - Text Editors vs Word Processors
+### 0:50-1:10 - Text Editors vs Word Processors
 
 > Critical distinction
 
 Explain:
 
-* Why Word should not be used for coding
-* What plain text is
-* Why "rich" formatting breaks code
+- Why Word should not be used for coding
+- What plain text is
+- Why "rich" formatting breaks code
 
 Activity:
 
-* Open a file in:
-  * Word (or Docs)
-  * Plain text editor
-  * `od -c`
-* Compare invisible formatting
+- Open a file in:
+  - Word (or Docs)
+  - Plain text editor
+  - `od -c`
+- Compare invisible formatting
 
-### 1:10–1:20 - Break
+### 1:10-1:20 - Break
 
-* Encourage movement
-* Optional puzzle or riddle on paper
+- Encourage movement
+- Optional puzzle or riddle on paper
 
-### 1:20–1:40 - What Is Code?
+### 1:20-1:40 - What Is Code?
 
 > Mental model first
 
 Teach:
 
-* Code = instructions
-* Computers are literal
-* Programs run "top-to-bottom"
-* Errors are normal
+- Code = instructions
+- Computers are literal
+- Programs run "top-to-bottom"
+- Errors are normal
 
 Demonstration:
 
-* Human "computer" game:
-  * Students give overly vague instructions
-  * Instructor follows them _exactly_
-  * Debrief on misunderstandings
+- Human "computer" game:
+  - Students give overly vague instructions
+  - Instructor follows them _exactly_
+  - Debrief on misunderstandings
 
-### 1:40–1:55 - First Terminal Experience
+### 1:40-1:55 - First Terminal Experience
 
 > Zero intimidation
 
 Teach:
 
-* What a terminal/command line is
-* Why it exists
+- What a terminal/command line is
+- Why it exists
   > It's just another, more direct way to talk to the computer
 
 Commands to teach:
@@ -178,38 +178,38 @@ ls
 echo 'Hello, computer!'
 ```
 
-### 1:55–2:00 - Wrap-Up & Teaser
+### 1:55-2:00 - Wrap-Up & Teaser
 
-* What they now know
-* How this leads into JavaScript
-* Celebrate effort, not mastery
+- What they now know
+- How this leads into JavaScript
+- Celebrate effort, not mastery
 
 ## 5. Printed Student Handouts
 
 ### Handout 1: Vocabulary (Fill-in-the-Blank)
 
-* Hardware
-* Software
-* File
-* Folder
-* Code
-* Program
-* Terminal
+- Hardware
+- Software
+- File
+- Folder
+- Code
+- Program
+- Terminal
 
 ### Handout 2: File System Map
 
-* Draw your folder tree
-* Label file types
-* Handout 3: Reflection
-* "One thing I learned…"
-* "One thing I'm curious about…"
+- Draw your folder tree
+- Label file types
+- Handout 3: Reflection
+- "One thing I learned…"
+- "One thing I'm curious about…"
 
 ## 6. Instructor Guardrails
 
-* Never type for a student
-* Normalize mistakes out loud
-* Repeat: _"This is new - it's supposed to feel weird"_
-* If a student is stuck ask: _"What do you think the computer thinks?"_
+- Never type for a student
+- Normalize mistakes out loud
+- Repeat: _"This is new - it's supposed to feel weird"_
+- If a student is stuck ask: _"What do you think the computer thinks?"_
 
 ## 7. Bridge to Workshop #2 (JavaScript Basics)
 
@@ -225,8 +225,8 @@ console.log("I wrote code!");
 
 ## 8. Overarching Goals
 
-* Reduce fear before complexity
-* Build shared vocabulary
-* Work across Windows & Chromebooks
-* Scale to mixed experience levels
-* Set a clean runway for JavaScript
+- Reduce fear before complexity
+- Build shared vocabulary
+- Work across Windows & Chromebooks
+- Scale to mixed experience levels
+- Set a clean runway for JavaScript
