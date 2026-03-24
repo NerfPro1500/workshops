@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Unique Nonogram Puzzle</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f0f2f5;
+    }
+
+    .controls {
+      margin: 20px;
+    }
+
+    #game-container {
+      display: grid;
+      position: relative;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .cell {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      user-select: none;
+    }
+
+    .cell.filled {
+      background-color: #333;
+    }
+
+    .cell.marked {
+      color: #e74c3c;
+    }
+
+    .clue {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 2px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .row-clue {
+      flex-direction: row;
+      padding-right: 10px;
+    }
+
+    .col-clue {
+      flex-direction: column;
+      padding-bottom: 10px;
+    }
+
+    .win-msg {
+      color: #27ae60;
+      font-weight: bold;
+      margin-top: 10px;
+      visibility: hidden;
+    }
+
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    button:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+    }
+
+    .progress {
+      margin-top: 10px;
+      color: #7f8c8d;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    .progress.active {
+      color: #3498db;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Nonogram Solver</h1>
+  <div class="controls">
+    Size: <select id="grid-size">
+      <option value="5">5x5</option>
+      <option value="7">7x7</option>
+      <option value="10">10x10</option>
+    </select>
+    <button id="new-btn" onclick="initGame()">New Puzzle</button>
+  </div>
+
+  <div id="progress" class="progress"></div>
+  <div id="game-container"></div>
+  <div id="win-message" class="win-msg">Puzzle Solved! 🎉</div>
+
+  <script>
+    let size = 5;
+    let solution = [];
+    let userGrid = [];
+    let rowClues = [];
+    let colClues = [];
+    let cellElements = [];
+    let generating = false;
+    let isDragging = false;
+    let dragValue = 0; // value to paint during drag
+    let dragStartRow = -1;
+    let dragStartCol = -1;
+    let dragAxis = null; // null | 'row' | 'col'
+
+    // --- LOGIC: LINE-BASED SOLVER WITH CONSTRAINT PROPAGATION ---
+
+    function getClues(line) {
+      const clues = [];
+      let count = 0;
+      for (let i = 0; i < line.length; i++) {
+        if (line[i] === 1) count++;
+        else if (count > 0) { clues.push(count); count = 0; }
+      }
+      if (count > 0) clues.push(count);
+      return clues.length ? clues : [0];
+    }
+
+    // Generate all valid line permutations for given clues
+    // Returns array of valid line patterns (as arrays of 0/1)
+    function generateLinePermutations(clues, lineLen) {
+      if (clues.length === 1 && clues[0] === 0) {
+        return [new Array(lineLen).fill(0)];
+      }
+
+      const results = [];
+      const minSpace = clues.reduce((a, b) => a + b, 0) + clues.length - 1;
+
+      if (minSpace > lineLen) return [];
+
+      function generate(clueIdx, pos, current) {
+        if (clueIdx === clues.length) {
+          // Fill rest with 0s
+          while (current.length < lineLen) current.push(0);
+          results.push([...current]);
+          return;
+        }
+
+        const blockLen = clues[clueIdx];
+        const remainingClues = clues.slice(clueIdx + 1);
+        const remainingSpace = remainingClues.reduce((a, b) => a + b, 0) + remainingClues.length;
+        const maxStart = lineLen - remainingSpace - blockLen;
+
+        for (let start = pos; start <= maxStart; start++) {
+          const next = current.slice();
+          // Add 0s before block
+          while (next.length < start) next.push(0);
+          // Add block
+          for (let i = 0; i < blockLen; i++) next.push(1);
+          // Add gap after block (if not last)
+          if (clueIdx < clues.length - 1) next.push(0);
+
+          generate(clueIdx + 1, next.length, next);
+        }
+      }
+
+      generate(0, 0, []);
+      return results;
+    }
+
+    // Filter permutations that are compatible with known cells
+    // known: array where -1=unknown, 0=empty, 1=filled
+    function filterPermutations(perms, known) {
+      return perms.filter(perm => {
+        for (let i = 0; i < known.length; i++) {
+          if (known[i] !== -1 && known[i] !== perm[i]) return false;
+        }
+        return true;
+      });
+    }
+
+    // Find cells that are the same in ALL permutations
+    function intersectPermutations(perms, lineLen) {
+      if (perms.length === 0) return null; // No valid permutations = contradiction
+
+      const result = new Array(lineLen).fill(-1);
+      for (let i = 0; i < lineLen; i++) {
+        const val = perms[0][i];
+        let allSame = true;
+        for (let j = 1; j < perms.length; j++) {
+          if (perms[j][i] !== val) { allSame = false; break; }
+        }
+        if (allSame) result[i] = val;
+      }
+      return result;
+    }
+
+    // Solve puzzle using constraint propagation
+    // Returns: { solved: true/false, grid: result, unique: true/false/null }
+    function solvePuzzle(rClues, cClues, maxSolutions = 2) {
+      const n = rClues.length;
+      const grid = new Array(n * n).fill(-1);
+
+      // Precompute all valid permutations for each line
+      const rowPerms = rClues.map(clue => generateLinePermutations(clue, n));
+      const colPerms = cClues.map(clue => generateLinePermutations(clue, n));
+
+      // Check for empty perm sets (impossible clues)
+      for (let i = 0; i < n; i++) {
+        if (rowPerms[i].length === 0 || colPerms[i].length === 0) {
+          return { solved: false, grid: null, unique: null };
+        }
+      }
+
+      // Constraint propagation loop
+      let changed = true;
+      let iterations = 0;
+      const maxIterations = n * n * 2;
+
+      while (changed && iterations < maxIterations) {
+        changed = false;
+        iterations++;
+
+        // Process rows
+        for (let r = 0; r < n; r++) {
+          const known = [];
+          for (let c = 0; c < n; c++) known.push(grid[r * n + c]);
+
+          const filtered = filterPermutations(rowPerms[r], known);
+          if (filtered.length === 0) {
+            return { solved: false, grid: null, unique: null };
+          }
+          rowPerms[r] = filtered;
+
+          const deduced = intersectPermutations(filtered, n);
+          for (let c = 0; c < n; c++) {
+            if (grid[r * n + c] === -1 && deduced[c] !== -1) {
+              grid[r * n + c] = deduced[c];
+              changed = true;
+            }
+          }
+        }
+
+        // Process columns
+        for (let c = 0; c < n; c++) {
+          const known = [];
+          for (let r = 0; r < n; r++) known.push(grid[r * n + c]);
+
+          const filtered = filterPermutations(colPerms[c], known);
+          if (filtered.length === 0) {
+            return { solved: false, grid: null, unique: null };
+          }
+          colPerms[c] = filtered;
+
+          const deduced = intersectPermutations(filtered, n);
+          for (let r = 0; r < n; r++) {
+            if (grid[r * n + c] === -1 && deduced[r] !== -1) {
+              grid[r * n + c] = deduced[r];
+              changed = true;
+            }
+          }
+        }
+      }
+
+      // Check if fully solved
+      const unsolved = grid.indexOf(-1);
+      if (unsolved === -1) {
+        return { solved: true, grid: grid.slice(), unique: true };
+      }
+
+      // Need to branch - find cell with minimum branching factor
+      let minBranches = Infinity;
+      let branchCell = unsolved;
+
+      for (let i = 0; i < grid.length; i++) {
+        if (grid[i] === -1) {
+          const r = Math.floor(i / n);
+          const c = i % n;
+          const branches = Math.min(rowPerms[r].length, colPerms[c].length);
+          if (branches < minBranches) {
+            minBranches = branches;
+            branchCell = i;
+          }
+        }
+      }
+
+      // Try both values for branch cell
+      let solutionCount = 0;
+      let foundGrid = null;
+
+      for (let val of [0, 1]) {
+        const testGrid = grid.slice();
+        testGrid[branchCell] = val;
+
+        // Create fresh perm copies for this branch
+        const testRowPerms = rowPerms.map(p => p.slice());
+        const testColPerms = colPerms.map(p => p.slice());
+
+        const result = solveBranch(rClues, cClues, testGrid, testRowPerms, testColPerms, n);
+        if (result.solved) {
+          solutionCount++;
+          foundGrid = result.grid;
+          if (solutionCount >= maxSolutions) {
+            return { solved: true, grid: foundGrid, unique: false };
+          }
+        }
+      }
+
+      if (solutionCount === 1) {
+        return { solved: true, grid: foundGrid, unique: true };
+      } else if (solutionCount > 1) {
+        return { solved: true, grid: foundGrid, unique: false };
+      }
+      return { solved: false, grid: null, unique: null };
+    }
+
+    function solveBranch(rClues, cClues, grid, rowPerms, colPerms, n) {
+      // Continue constraint propagation on this branch
+      let changed = true;
+      let iterations = 0;
+
+      while (changed && iterations < n * n) {
+        changed = false;
+        iterations++;
+
+        for (let r = 0; r < n; r++) {
+          const known = [];
+          for (let c = 0; c < n; c++) known.push(grid[r * n + c]);
+
+          const filtered = filterPermutations(rowPerms[r], known);
+          if (filtered.length === 0) return { solved: false, grid: null };
+          rowPerms[r] = filtered;
+
+          const deduced = intersectPermutations(filtered, n);
+          for (let c = 0; c < n; c++) {
+            if (grid[r * n + c] === -1 && deduced[c] !== -1) {
+              grid[r * n + c] = deduced[c];
+              changed = true;
+            }
+          }
+        }
+
+        for (let c = 0; c < n; c++) {
+          const known = [];
+          for (let r = 0; r < n; r++) known.push(grid[r * n + c]);
+
+          const filtered = filterPermutations(colPerms[c], known);
+          if (filtered.length === 0) return { solved: false, grid: null };
+          colPerms[c] = filtered;
+
+          const deduced = intersectPermutations(filtered, n);
+          for (let r = 0; r < n; r++) {
+            if (grid[r * n + c] === -1 && deduced[r] !== -1) {
+              grid[r * n + c] = deduced[r];
+              changed = true;
+            }
+          }
+        }
+      }
+
+      if (grid.indexOf(-1) === -1) {
+        return { solved: true, grid: grid };
+      }
+
+      // More branching needed
+      const unsolved = grid.indexOf(-1);
+      for (let val of [0, 1]) {
+        const testGrid = grid.slice();
+        testGrid[unsolved] = val;
+        const result = solveBranch(rClues, cClues, testGrid,
+          rowPerms.map(p => p.slice()), colPerms.map(p => p.slice()), n);
+        if (result.solved) return result;
+      }
+
+      return { solved: false, grid: null };
+    }
+
+    // Async puzzle generation with progress updates
+    async function generateUniquePuzzle() {
+      const maxAttempts = 200;
+      const progressEl = document.getElementById('progress');
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        if (attempt % 5 === 0 || attempt === 1) {
+          progressEl.textContent = `Generating puzzle... (attempt ${attempt}/${maxAttempts})`;
+          progressEl.className = 'progress active';
+          await new Promise(r => setTimeout(r, 0)); // Yield to UI
+        }
+
+        const grid = new Int8Array(size * size);
+        let hasFilledCell = false;
+
+        // Generate random pattern with ~50% fill for better uniqueness
+        const fillRate = 0.45 + Math.random() * 0.15;
+        for (let i = 0; i < grid.length; i++) {
+          grid[i] = Math.random() < fillRate ? 1 : 0;
+          if (grid[i] === 1) hasFilledCell = true;
+        }
+
+        if (!hasFilledCell) continue;
+
+        const rClues = [];
+        const cClues = [];
+
+        for (let i = 0; i < size; i++) {
+          const row = [];
+          for (let j = 0; j < size; j++) row.push(grid[i * size + j]);
+          rClues.push(getClues(row));
+
+          const col = [];
+          for (let j = 0; j < size; j++) col.push(grid[j * size + i]);
+          cClues.push(getClues(col));
+        }
+
+        // Use the fast solver to check uniqueness
+        const result = solvePuzzle(rClues, cClues, 2);
+
+        if (result.solved && result.unique) {
+          progressEl.textContent = `Found unique puzzle on attempt ${attempt}!`;
+          setTimeout(() => { progressEl.textContent = ''; progressEl.className = 'progress'; }, 2000);
+          return { grid: Array.from(grid), rClues, cClues };
+        }
+      }
+
+      // Fallback: diagonal pattern
+      progressEl.textContent = 'Using fallback pattern';
+      setTimeout(() => { progressEl.textContent = ''; progressEl.className = 'progress'; }, 2000);
+
+      const grid = new Array(size * size).fill(0);
+      for (let i = 0; i < size; i++) grid[i * size + i] = 1;
+      const rClues = Array.from({ length: size }, () => [1]);
+      const cClues = Array.from({ length: size }, () => [1]);
+      return { grid, rClues, cClues };
+    }
+
+    // --- UI & INTERACTION ---
+
+    async function initGame() {
+      if (generating) return;
+      generating = true;
+
+      const btn = document.getElementById('new-btn');
+      btn.disabled = true;
+
+      size = parseInt(document.getElementById('grid-size').value);
+      document.getElementById('win-message').style.visibility = 'hidden';
+
+      const puzzle = await generateUniquePuzzle();
+      solution = puzzle.grid;
+      rowClues = puzzle.rClues;
+      colClues = puzzle.cClues;
+      userGrid = new Array(size * size).fill(0);
+
+      renderInitial();
+
+      btn.disabled = false;
+      generating = false;
+    }
+
+    function renderInitial() {
+      const container = document.getElementById('game-container');
+      container.innerHTML = '';
+      container.style.gridTemplateColumns = `100px repeat(${size}, 30px)`;
+      cellElements = [];
+
+      container.appendChild(document.createElement('div'));
+
+      for (let i = 0; i < size; i++) {
+        const el = document.createElement('div');
+        el.className = 'clue col-clue';
+        el.innerHTML = colClues[i].join('<br>');
+        container.appendChild(el);
+      }
+
+      for (let r = 0; r < size; r++) {
+        const clueEl = document.createElement('div');
+        clueEl.className = 'clue row-clue';
+        clueEl.textContent = rowClues[r].join(' ');
+        container.appendChild(clueEl);
+
+        for (let c = 0; c < size; c++) {
+          const idx = r * size + c;
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.dataset.idx = idx;
+          cellElements[idx] = cell;
+          container.appendChild(cell);
+        }
+      }
+
+      container.onmousedown = handleMouseDown;
+      container.onmousemove = handleMouseMove;
+      container.oncontextmenu = (e) => e.preventDefault();
+    }
+
+    function updateCell(idx) {
+      const cell = cellElements[idx];
+      if (!cell) return;
+
+      cell.classList.remove('filled', 'marked');
+      cell.textContent = '';
+
+      if (userGrid[idx] === 1) {
+        cell.classList.add('filled');
+      } else if (userGrid[idx] === 2) {
+        cell.classList.add('marked');
+        cell.textContent = 'X';
+      }
+    }
+
+    function handleMouseDown(event) {
+      const cell = event.target;
+      if (!cell.classList.contains('cell')) return;
+
+      const idx = parseInt(cell.dataset.idx, 10);
+
+      if (event.button === 0) {
+        dragValue = userGrid[idx] === 1 ? 0 : 1;
+      } else if (event.button === 2) {
+        dragValue = userGrid[idx] === 2 ? 0 : 2;
+      } else {
+        return;
+      }
+
+      isDragging = true;
+      dragStartRow = Math.floor(idx / size);
+      dragStartCol = idx % size;
+      dragAxis = null;
+      userGrid[idx] = dragValue;
+      updateCell(idx);
+      checkWin();
+    }
+
+    function handleMouseMove(event) {
+      if (!isDragging) return;
+      // Only paint while the button is actually held
+      if (event.buttons === 0) {
+        isDragging = false;
+        dragAxis = null;
+        return;
+      }
+
+      const cell = event.target;
+      if (!cell.classList.contains('cell')) return;
+
+      const idx = parseInt(cell.dataset.idx, 10);
+      const row = Math.floor(idx / size);
+      const col = idx % size;
+
+      // First neighboring cell determines whether we lock to row or column.
+      if (dragAxis === null) {
+        if (row === dragStartRow && col !== dragStartCol) {
+          dragAxis = 'row';
+        } else if (col === dragStartCol && row !== dragStartRow) {
+          dragAxis = 'col';
+        } else if (row !== dragStartRow || col !== dragStartCol) {
+          // Ignore diagonal/non-aligned movement until a clear neighbor sets direction.
+          return;
+        }
+      }
+
+      if (dragAxis === 'row' && row !== dragStartRow) return;
+      if (dragAxis === 'col' && col !== dragStartCol) return;
+      if (userGrid[idx] === dragValue) return; // already set, skip
+
+      userGrid[idx] = dragValue;
+      updateCell(idx);
+      checkWin();
+    }
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      dragAxis = null;
+    });
+
+    function checkWin() {
+      for (let i = 0; i < userGrid.length; i++) {
+        const userVal = userGrid[i] === 1 ? 1 : 0;
+        if (userVal !== solution[i]) return;
+      }
+      document.getElementById('win-message').style.visibility = 'visible';
+    }
+
+    initGame();
+  </script>
+</body>
+
+</html>
