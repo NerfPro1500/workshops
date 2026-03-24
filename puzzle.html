@@ -102,6 +102,18 @@
     .progress.active {
       color: #3498db;
     }
+
+    .stats {
+      margin-top: 6px;
+      color: #2c3e50;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    .stats .errors {
+      color: #c0392b;
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -118,6 +130,7 @@
   </div>
 
   <div id="progress" class="progress"></div>
+  <div id="stats" class="stats"></div>
   <div id="game-container"></div>
   <div id="win-message" class="win-msg">Puzzle Solved! 🎉</div>
 
@@ -474,6 +487,7 @@
       userGrid = new Array(size * size).fill(0);
 
       renderInitial();
+      updateStats();
 
       btn.disabled = false;
       generating = false;
@@ -530,6 +544,22 @@
       }
     }
 
+    function updateStats() {
+      let leftToFill = 0;
+      let errors = 0;
+
+      for (let i = 0; i < userGrid.length; i++) {
+        if (solution[i] === 1 && userGrid[i] !== 1) leftToFill++;
+
+        if ((userGrid[i] === 1 && solution[i] === 0) || (userGrid[i] === 2 && solution[i] === 1)) {
+          errors++;
+        }
+      }
+
+      const statsEl = document.getElementById('stats');
+      statsEl.innerHTML = `Left to fill: <strong>${leftToFill}</strong> | Errors: <span class="errors">${errors}</span>`;
+    }
+
     function handleMouseDown(event) {
       const cell = event.target;
       if (!cell.classList.contains('cell')) return;
@@ -550,6 +580,7 @@
       dragAxis = null;
       userGrid[idx] = dragValue;
       updateCell(idx);
+      updateStats();
       checkWin();
     }
 
@@ -587,6 +618,7 @@
 
       userGrid[idx] = dragValue;
       updateCell(idx);
+      updateStats();
       checkWin();
     }
 
