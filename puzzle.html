@@ -114,6 +114,152 @@
       color: #c0392b;
       font-weight: bold;
     }
+
+    .celebration {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 25, 35, 0.75);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+      z-index: 1000;
+    }
+
+    .celebration.show {
+      opacity: 1;
+    }
+
+    .celebration-card {
+      background: linear-gradient(135deg, #fff8e7, #fef3c7);
+      border: 2px solid #f59e0b;
+      border-radius: 14px;
+      padding: 20px 28px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+      text-align: center;
+      color: #7c2d12;
+      font-weight: bold;
+      transform: scale(0.9);
+      animation: pop-in 280ms ease forwards;
+    }
+
+    .celebration-title {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .celebration-sub {
+      font-size: 16px;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 16px;
+      border-radius: 2px;
+      opacity: 0;
+      top: 55%;
+      left: 50%;
+      animation: confetti-burst 1300ms ease-out forwards;
+    }
+
+    .c1 {
+      background: #ef4444;
+      transform: translate(-10px, -10px) rotate(8deg);
+    }
+
+    .c2 {
+      background: #3b82f6;
+      transform: translate(14px, -8px) rotate(12deg);
+    }
+
+    .c3 {
+      background: #10b981;
+      transform: translate(-6px, 8px) rotate(20deg);
+    }
+
+    .c4 {
+      background: #f59e0b;
+      transform: translate(5px, 7px) rotate(-5deg);
+    }
+
+    .c5 {
+      background: #a855f7;
+      transform: translate(-2px, 0px) rotate(15deg);
+    }
+
+    .c6 {
+      background: #ec4899;
+      transform: translate(2px, -1px) rotate(-18deg);
+    }
+
+    @keyframes pop-in {
+      from {
+        transform: scale(0.8);
+      }
+
+      to {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes confetti-burst {
+      0% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .c1 {
+      --x: -180px;
+      --y: -160px;
+    }
+
+    .c2 {
+      --x: 170px;
+      --y: -150px;
+    }
+
+    .c3 {
+      --x: -200px;
+      --y: 130px;
+    }
+
+    .c4 {
+      --x: 190px;
+      --y: 140px;
+    }
+
+    .c5 {
+      --x: -40px;
+      --y: -200px;
+    }
+
+    .c6 {
+      --x: 25px;
+      --y: 210px;
+    }
+
+    .confetti {
+      animation-name: confetti-fly;
+    }
+
+    @keyframes confetti-fly {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) rotate(620deg);
+      }
+    }
   </style>
 </head>
 
@@ -134,6 +280,19 @@
   <div id="game-container"></div>
   <div id="win-message" class="win-msg">Puzzle Solved! 🎉</div>
 
+  <div id="celebration" class="celebration" aria-hidden="true">
+    <div class="confetti c1"></div>
+    <div class="confetti c2"></div>
+    <div class="confetti c3"></div>
+    <div class="confetti c4"></div>
+    <div class="confetti c5"></div>
+    <div class="confetti c6"></div>
+    <div class="celebration-card">
+      <div class="celebration-title">Perfect Solve!</div>
+      <div class="celebration-sub">0 left to fill and 0 errors</div>
+    </div>
+  </div>
+
   <script>
     let size = 5;
     let solution = [];
@@ -147,6 +306,7 @@
     let dragStartRow = -1;
     let dragStartCol = -1;
     let dragAxis = null; // null | 'row' | 'col'
+    let hasCelebrated = false;
 
     // --- LOGIC: LINE-BASED SOLVER WITH CONSTRAINT PROPAGATION ---
 
@@ -485,6 +645,7 @@
       rowClues = puzzle.rClues;
       colClues = puzzle.cClues;
       userGrid = new Array(size * size).fill(0);
+      hasCelebrated = false;
 
       renderInitial();
       updateStats();
@@ -558,6 +719,32 @@
 
       const statsEl = document.getElementById('stats');
       statsEl.innerHTML = `Left to fill: <strong>${leftToFill}</strong> | Errors: <span class="errors">${errors}</span>`;
+
+      if (leftToFill === 0 && errors === 0 && !hasCelebrated) {
+        showCelebration();
+      }
+    }
+
+    function showCelebration() {
+      const celebrationEl = document.getElementById('celebration');
+      if (!celebrationEl) return;
+
+      hasCelebrated = true;
+      celebrationEl.classList.add('show');
+      celebrationEl.setAttribute('aria-hidden', 'false');
+
+      // Restart confetti animation each time celebration is shown.
+      const confettiEls = celebrationEl.querySelectorAll('.confetti');
+      confettiEls.forEach((el) => {
+        el.style.animation = 'none';
+        void el.offsetHeight;
+        el.style.animation = '';
+      });
+
+      setTimeout(() => {
+        celebrationEl.classList.remove('show');
+        celebrationEl.setAttribute('aria-hidden', 'true');
+      }, 2000);
     }
 
     function handleMouseDown(event) {
