@@ -209,6 +209,55 @@ body {
   padding: var(--spacing-unit) 0;
 }
 
+/* Nav filter */
+.nav-filter {
+  position: relative;
+  padding: 0 var(--spacing-unit);
+  margin-bottom: 0.75rem;
+}
+
+.nav-filter-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem 0.5rem 2rem;
+  font-size: 0.875rem;
+  font-family: var(--font-family);
+  color: var(--text-color);
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.nav-filter-input:focus {
+  border-color: var(--primary-color);
+}
+
+.nav-filter-input::placeholder {
+  color: var(--text-muted);
+}
+
+.nav-filter-icon {
+  position: absolute;
+  left: calc(var(--spacing-unit) + 0.5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.nav-item.nav-filtered-out {
+  display: none;
+}
+
+.nav-no-results {
+  padding: 0.75rem var(--spacing-unit);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-style: italic;
+  display: none;
+}
+
 /* Navigation */
 .nav-list {
   list-style: none;

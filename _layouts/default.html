@@ -158,6 +158,59 @@
     if (activeLink) {
       activeLink.scrollIntoView({ block: 'center' });
     }
+
+    // Workshop filter
+    (function () {
+      var filterInput = document.getElementById('navFilter');
+      var navList = document.querySelector('.nav-list');
+      if (!filterInput || !navList) return;
+
+      // Add no-results message element
+      var noResults = document.createElement('div');
+      noResults.className = 'nav-no-results';
+      noResults.textContent = 'No workshops found';
+      navList.parentNode.insertBefore(noResults, navList.nextSibling);
+
+      // Remember which items were already expanded before filtering
+      var expandedBeforeFilter = new Set();
+      navList.querySelectorAll('.nav-item.expanded').forEach(function (item) {
+        expandedBeforeFilter.add(item);
+      });
+
+      filterInput.addEventListener('input', function () {
+        var query = this.value.toLowerCase().trim();
+        var items = navList.querySelectorAll('.nav-item');
+        var visibleCount = 0;
+
+        items.forEach(function (item) {
+          if (!query) {
+            item.classList.remove('nav-filtered-out');
+            // Restore original expanded state
+            if (expandedBeforeFilter.has(item)) {
+              item.classList.add('expanded');
+              var btn = item.querySelector('.nav-toggle-btn');
+              if (btn) btn.setAttribute('aria-expanded', 'true');
+            } else {
+              item.classList.remove('expanded');
+              var btn = item.querySelector('.nav-toggle-btn');
+              if (btn) btn.setAttribute('aria-expanded', 'false');
+            }
+            visibleCount++;
+            return;
+          }
+          var title = (item.querySelector('.nav-item-header > a') || item.querySelector(':scope > a'));
+          var text = title ? title.textContent.toLowerCase() : '';
+          if (text.indexOf(query) !== -1) {
+            item.classList.remove('nav-filtered-out');
+            visibleCount++;
+          } else {
+            item.classList.add('nav-filtered-out');
+          }
+        });
+
+        noResults.style.display = (visibleCount === 0 && query) ? 'block' : 'none';
+      });
+    })();
   </script>
 </body>
 
