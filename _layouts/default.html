@@ -152,6 +152,12 @@
         if (btn) btn.setAttribute('aria-expanded', 'true');
       }
     });
+
+    // Scroll the sidebar so the active nav item is visible
+    var activeLink = document.querySelector('#sidebar .active');
+    if (activeLink) {
+      activeLink.scrollIntoView({ block: 'center' });
+    }
   </script>
 </body>
 
