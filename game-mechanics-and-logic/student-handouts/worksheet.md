@@ -64,4 +64,4 @@ My mechanic: <span class="blank-line-short"></span>
 
 ## Part 5: Share Time
 
-Write one thing you will say when you share your mechanic design with the group:
+Write at least one thing you will say when you share your mechanic design with the group:

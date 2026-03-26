@@ -639,15 +639,46 @@ blockquote p:last-child {
     padding-top: 0;
   }
 
+  /* Force solid black text for all printed content — accessibility for dyslexia */
+  body,
+  .main-content,
+  .main-content .content,
+  p,
+  li,
+  td,
+  th,
+  span,
+  blockquote,
+  blockquote p {
+    color: #000 !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #000 !important;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  code,
+  pre,
+  pre code {
+    color: #000 !important;
+  }
+
   a {
-    color: inherit;
+    color: #000 !important;
     text-decoration: underline;
   }
 
   a[href]::after {
     content: " (" attr(href) ")";
     font-size: 0.8em;
-    color: #666;
+    color: #000;
   }
 
   a[href^="#"]::after,
@@ -661,17 +692,6 @@ blockquote p:last-child {
   figure {
     page-break-inside: avoid;
     break-inside: avoid;
-  }
-
-  /* Keep headings with following content */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    page-break-after: avoid;
-    break-after: avoid;
   }
 }
 
