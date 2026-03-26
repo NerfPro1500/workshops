@@ -89,7 +89,7 @@ Think about these questions:
   - `Label` — ?
 - If your animation is called `"move"` in the editor but your code says `play("Move")`, will it work? Why not?
 - What's the difference between `_process()` and `_physics_process()`? Which one should you use for player movement?
-- If the player is moving left (`velocity.x < 0`), should `sprite.flip_h` be `true` or `false`?
+- If the player is moving left (`velocity.x < 0`), should `sprite.flip_h` be `true` or `false`? Make sure you think about which way your image is facing in the animation.
 
 ---
 
