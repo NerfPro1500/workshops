@@ -108,6 +108,30 @@ classes, modules, dictionaries, file I/O, and Git workflow.
 
 [View Workshop →]({{ site.baseurl }}/advanced-python/)
 
+---
+
+### [Game Engine Tools]({{ site.baseurl }}/game-engine/)
+
+**Date:** March 26, 2026
+**Duration:** 90 minutes
+**Theme:** _"Using a real game engine to build a small 2D platformer"_
+
+Build a complete 2D platformer in Godot by working with nodes, scenes, physics, and GDScript. Animate a character, flip sprites, collect gems, and display a score.
+
+[View Workshop →]({{ site.baseurl }}/game-engine/)
+
+---
+
+### [Video Game Design - Mechanics and Logic]({{ site.baseurl }}/game-mechanics-and-logic/)
+
+**Date:** April 2, 2026
+**Duration:** 2 hours
+**Theme:** _"How games teach you to play without boring you to death"_
+
+Learn how games teach mechanics through gameplay rather than text. Analyze real game examples, identify design patterns like progressive discovery and gating, and design your own mechanic introduction sequence.
+
+[View Workshop →]({{ site.baseurl }}/game-mechanics-and-logic/)
+
 ## About the Program
 
 **Branding:** Lansing Tech Studio  
